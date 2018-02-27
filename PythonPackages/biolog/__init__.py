@@ -8,3 +8,9 @@ info = LOGGER.info
 warning = LOGGER.warning
 error = LOGGER.error
 critical = LOGGER.critical
+
+
+def set_name(name):
+    """ Set logger name """
+    LOGGER.name = name
+    return
