@@ -1,0 +1,30 @@
+digraph G {
+    graph[
+          rankdir=LR,
+          center=true
+          ]
+    node [
+          color="black", 
+          # fillcolor="#cccccc",
+          # style="filled,solid",
+          fontsize=20,
+          shape=box
+          ]
+    lab [label="lab1.py"];
+    ex1 [label="exercise1.py"];
+    ex2 [label="exercise2.py"];
+    edge[
+         arrowhead="vee"
+         ];
+    lab->ex1;
+    lab->ex2;
+    
+    subgraph exercise_1 {
+        ex1->"ex1_functions.py";
+        ex1->"ex1_integration.py";
+        ex1->"ex1_errors.py";
+        label="Exercise 1";
+        label="Current situation";
+        color=black;
+    }
+}
