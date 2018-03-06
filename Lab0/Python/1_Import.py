@@ -5,6 +5,7 @@ Python allows this by setting up modules. One can import existing libraries usin
 ### IMPORTS  ###
 
 from __future__ import print_function  # Only necessary in Python 2
+import biolog
 
 biolog.info(3*'\t' + 20*'#' + 'IMPORTS' + 20*'#' + 3*'\n')
 
@@ -22,7 +23,6 @@ print('Square root of 25 computed from math module by importing only sqrt functi
 
 # Import a user defined module
 # Here we import biolog : Module developed to display log messages for the exercise
-import biolog
 
 biolog.info('Module developed to display log messages for the exercies')
 biolog.warning("When you explicitly import functions from modules, it can lead to naming errors!!!""")

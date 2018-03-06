@@ -15,9 +15,11 @@ def error(errors, n=0):
     compare them.
 
     """
+    
+    if n==0:
+        error = np.mean(np.square(errors))
     # COMPLETE CODE
-    biolog.warning("Error computation code must be completed")
-    return 1
+    return error
 
 
 def plot_error(dt_list, err, figure="Average_error", label="Error"):

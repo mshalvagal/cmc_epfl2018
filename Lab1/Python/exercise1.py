@@ -8,7 +8,7 @@ from ex1_integration import (
     ode_integrate_rk,
     plot_integration_methods
 )
-from ex1_errors import compute_error
+from ex1_errors import compute_error, plot_error
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -52,8 +52,7 @@ def exercise1():
     ode_rk = ode_integrate_rk(function_rk, x0, time_max, time_step)
 
     # Euler with lower time step (1.d)
-    biolog.warning("Euler with smaller ts must be implemented")
-    euler_time_step = None
+    euler_time_step = 0.2/4
     euler_ts_small = (
         euler_integrate(function, x0, time_max, euler_time_step)
         if euler_time_step is not None
@@ -68,7 +67,10 @@ def exercise1():
     )
 
     # Error analysis (Exercise 1.e)
-    biolog.warning("Error analysis must be implemented")
+    dt_list = np.logspace(-4,0)
+    compute_error(function, analytic_function, euler_integrate, x0, dt_list, label="Euler")
+    compute_error(function, analytic_function, ode_integrate, x0, dt_list, label="ODE")
+    
 
     # Show plots of all results
     if DEFAULT["save_figures"] is False:

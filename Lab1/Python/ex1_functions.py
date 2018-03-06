@@ -16,10 +16,8 @@ def analytic_function(t):
     (i.e. as a list or an areray)
     """
     # COMPLETE CODE
-    import biolog
-    biolog.warning("Analytical function must be implemented")
-    return None
-
+    
+    return 5-4*np.exp(-2*t)
 
 def function(x, *_):
     """ Exercise 1 ODE equation
@@ -37,7 +35,7 @@ def function(x, *_):
     (i.e. as a list or an areray)
     """
     # COMPLETE CODE
-    dxdt = None
+    dxdt = 2*(5-x)
     if dxdt is None:
         raise NotImplementedError("ODE has not been implemented")
     return dxdt
