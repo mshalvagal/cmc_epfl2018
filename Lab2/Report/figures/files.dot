@@ -1,0 +1,20 @@
+digraph G {
+    graph[rankdir=LR, center=true]
+    node [
+          color="black",
+          fontsize=20,
+          shape=box
+          ]
+    lab [label="lab2.py"];
+    ex1 [label="exercise3.py"];
+    ex2 [label="exercise4.py"];
+    edge[arrowhead="vee"];
+    lab->ex1;
+    lab->ex2;
+
+    subgraph exercise_files {
+        ex1->"ex3_pendulum.py";
+        ex2->"ex4_hopf.py";
+        color=black;
+    }
+}
