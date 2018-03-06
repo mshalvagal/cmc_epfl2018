@@ -11,7 +11,8 @@ def save_figure(figure):
     """ Save figure """
     if DEFAULT["save_figures"]:
         for extension in DEFAULT["save_extensions"]:
-            name = "{}.{}".format(figure, extension)
+            fig = figure.replace(" ", "_").replace(".", "dot")
+            name = "{}.{}".format(fig, extension)
             fig = plt.figure(figure)
             size = plt.rcParams.get('figure.figsize')
             fig.set_size_inches(0.7*size[0], 0.7*size[1], forward=True)
@@ -50,6 +51,8 @@ def bioplot(data_x, data_y, **kwargs):
         plt.legend(loc="best")
         plt.ylabel("State")
         plt.grid(True)
+    for ax in axarr:
+        ax.set_xlim([min(data_y), max(data_y)])
     plt.xlabel("Time [s]")
     save_figure(figure)
     return
@@ -98,11 +101,11 @@ def phase_range(state):
     # Y axis
     min1 = np.min(state[:, :, 1])
     max1 = np.max(state[:, :, 1])
-    # Chack range and correct of necessary
-    if max0 - min0 == 0:
-        min0, max0 = -0.1, +0.1
-    if max1 - min1 == 0:
-        min1, max1 = -0.1, +0.1
+    # Check range and correct of necessary
+    if np.abs(max0 - min0) < 1e-6:
+        min0, max0 = min0-0.1, max0+0.1
+    if np.abs(max1 - min1) < 1e-6:
+        min1, max1 = min1-0.1, max1+0.1
     return [[min0, max0], [min1, max1]]
 
 
@@ -114,7 +117,7 @@ def phase_compute(ode, quiver_range, scale, n, args):
         for j in range(2)
     ]
     # Generate grid
-    rng = [abs(max0 - min0), abs(max1 - min1)]
+    rng = [max0 - min0, max1 - min1]
     X, Y = np.meshgrid(
         np.arange(min0-scale*rng[0], max0+scale*rng[0], rng[0]/float(n)),
         np.arange(min1-scale*rng[1], max1+scale*rng[1], rng[1]/float(n))
