@@ -8,6 +8,7 @@ info = LOGGER.info
 warning = LOGGER.warning
 error = LOGGER.error
 critical = LOGGER.critical
+exception = LOGGER.exception
 
 
 def set_name(name):
