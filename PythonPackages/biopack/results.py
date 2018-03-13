@@ -136,6 +136,25 @@ class MultipleResultsODE(ResultData):
         super(MultipleResultsODE, self).__init__(state, time, ode, args)
         return
 
+    def plot_state(self, figure=None, label=None, **kwargs):
+        """ plot phase plane """
+        scale = kwargs.pop("scale", 0.2)
+        linewidth = kwargs.pop("linewidth", 2.0)
+        n_subs = kwargs.pop("n_subs", 2)
+        subs_labels = kwargs.pop("subs_labels", None)
+        return [
+            bioplot(
+                state, self.time,
+                figure=figure,
+                label=label,
+                scale=scale,
+                linewidth=linewidth,
+                n_subs=n_subs,
+                subs_labels=subs_labels
+            )
+            for state in self.state
+        ]
+
     def plot_phase(self, figure=None, label=None, **kwargs):
         """ plot phase plane """
         return plot_phase(

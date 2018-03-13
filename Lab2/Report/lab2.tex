@@ -41,11 +41,20 @@
   (briefly describe the calculation steps). }
 
 
+\begin{equation}
+  \label{eq:ode-pendulum}
+  \ddot{\theta} = - {g \over L} \sin \theta - d \dot{\theta}
+\end{equation}
+
+where $\theta$ is the angle, $g$ the gravity constant, $L$ the length of the pendulum
+and $d$ is the damping coefficient.
+
+
 \subsection*{3.b Numerically solve the differential equations of the pendulum
   with different initial conditions.  Show several time evolutions and phase
   portraits with different initial conditions that illustrate several aspects of
   the interesting behavior of the pendulum. See \fileref{exercise3.py} and
-  \fileref{pendulum.py} for help with implementation.}
+  \fileref{ex3\_pendulum.py} for help with implementation.}
 
 
 \subsection*{3.c Investigate and describe how the behavior of the pendulum
@@ -66,7 +75,7 @@
 
 \begin{equation}
   \label{eq:ode-pendulum-dry}
-  \dot{\theta} = - {g \over L} \sin \theta - d \cdot sign(\dot{\theta})
+  \ddot{\theta} = - {g \over L} \sin \theta - d \cdot sign(\dot{\theta})
 \end{equation}
 
 
@@ -74,7 +83,7 @@
 
 \subsection*{4.a Implement a single Hopf oscillator and illustrate its various
   behaviors using time evolution and phase plane figures. See
-  \fileref{exercise4.py} and \fileref{hopf.py} for help with implementation.}
+  \fileref{exercise4.py} and \fileref{ex4\_hopf.py} for help with implementation.}
 
 
 \subsection*{4.b Implement a system of two coupled Hopf oscillators and
