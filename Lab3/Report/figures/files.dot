@@ -1,0 +1,9 @@
+digraph G {
+    graph[rankdir=LR, center=true]
+    node [
+          color="black",
+          fontsize=20,
+          shape=box
+          ]
+    lab [label="lab3.py"];
+}
