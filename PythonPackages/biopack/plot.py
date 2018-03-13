@@ -7,12 +7,15 @@ import biolog
 from .default import DEFAULT
 
 
-def save_figure(figure):
+def save_figure(figure, name=None):
     """ Save figure """
     if DEFAULT["save_figures"]:
         for extension in DEFAULT["save_extensions"]:
             fig = figure.replace(" ", "_").replace(".", "dot")
-            name = "{}.{}".format(fig, extension)
+            if name is None:
+                name = "{}.{}".format(fig, extension)
+            else:
+                name = "{}.{}".format(name, extension)
             fig = plt.figure(figure)
             size = plt.rcParams.get('figure.figsize')
             fig.set_size_inches(0.7*size[0], 0.7*size[1], forward=True)
@@ -32,6 +35,7 @@ def bioplot(data_x, data_y, **kwargs):
     marker = kwargs.pop("marker", "")
     linestyle = kwargs.pop("linestyle", "-")
     n_subs = kwargs.pop("n_subs", 1)
+    subs_labels = kwargs.pop("subs_labels", None)
     plt.figure(figure)
     _, axarr = plt.subplots(n_subs, sharex=True, num=figure)
     if n_subs == 1:
@@ -48,11 +52,14 @@ def bioplot(data_x, data_y, **kwargs):
             linestyle=linestyle,
             linewidth=linewidth
         )
-        plt.legend(loc="best")
-        plt.ylabel("State")
+    for i, ax in enumerate(axarr):
+        plt.subplot(n_subs, 1, i+1)
+        plt.ylabel("State" if not subs_labels else subs_labels[i])
         plt.grid(True)
-    for ax in axarr:
         ax.set_xlim([min(data_y), max(data_y)])
+        leg = plt.legend(loc="best")
+        if label is False:
+            leg.set_visible(False)
     plt.xlabel("Time [s]")
     save_figure(figure)
     return
