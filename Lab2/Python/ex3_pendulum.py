@@ -137,8 +137,11 @@ def pendulum_equation(theta, dtheta, time=0, parameters=None):
         parameters.sin,
         parameters.dry
     )
-    biolog.warning("Pendulum equation must be implemented")
-    return 0
+    if dry:
+        d2theta = -np.sin(theta)*g/L - d*np.sign(dtheta)
+    else:
+        d2theta = -np.sin(theta)*g/L - d*dtheta
+    return d2theta
 
 
 def pendulum_system(theta, dtheta, time=0, parameters=None):

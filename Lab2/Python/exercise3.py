@@ -36,23 +36,34 @@ def exercise3():
     # (NOTE: pendulum_equation must be imlpemented first)
     biolog.debug("Running integration example")
     res = integrate(pendulum_integration, x0, time, args=(parameters,))
-    res.plot_state("State")
-    res.plot_phase("Phase")
+    res.plot_state("State 1")
+    res.plot_phase("Phase 1")
 
     # Evolutions
     # Write code here (You can add functions for the different cases)
-    biolog.warning(
-        "Evolution of pendulum in normal conditions must be implemented"
-    )
-    biolog.warning(
-        "Evolution of pendulum without damping must be implemented"
-    )
-    biolog.warning(
-        "Evolution of pendulum with perturbations must be implemented"
-    )
-    biolog.warning(
-        "Evolution of pendulum with dry friction must be implemented"
-    )
+    x0 = [np.pi, 0.0]
+    res = integrate(pendulum_integration, x0, time, args=(parameters,))
+    res.plot_state("State 2")
+    res.plot_phase("Phase 2")
+
+    parameters.d = 0.0
+    res = integrate(pendulum_integration, [0.1, 0.0], time, args=(parameters,))
+    res.plot_state("State_oscillation")
+    res.plot_phase("Phase_oscillation")
+    
+    temp = np.size(time)/10
+    x0 = [0.1, 0.0]
+    for i in range(10):
+        res = integrate(pendulum_integration, x0, time[temp*i:temp*(i+1)], args=(parameters,))
+        x0[1] = np.pi*np.random.random()
+        res.plot_state("State_perturbation")
+        res.plot_phase("Phase_perturbation")
+
+    parameters.d = 0.3
+    parameters.dry = True
+    res_dry = integrate(pendulum_integration, [np.pi/2, -0.1], time, args=(parameters,))
+    res_dry.plot_state("State_dry")
+    res_dry.plot_phase("Phase_dry")
 
     # Show plots of all results
     if DEFAULT["save_figures"] is False:
