@@ -32,7 +32,10 @@ def pendulum_equation(theta, dtheta, parameters=PendulumParameters()):
         parameters.b1,
         parameters.b2
     )
-    return 0
+    
+    d2theta = -g/L*sin(theta) + k2*max(s_theta_ref2-theta,0) + k1*min(s_theta_ref1-theta,0)
+    
+    return d2theta
 
 
 def pendulum_system(theta, dtheta, parameters=PendulumParameters()):

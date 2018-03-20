@@ -218,7 +218,7 @@ class PendulumParameters(SystemParameters):
         else:
             self.parameters['k2'] = value
         biolog.info(
-            'Changed spring constant of spring 1 to {} [N/rad]'.format(self.parameters['k2']))
+            'Changed spring constant of spring 2 to {} [N/rad]'.format(self.parameters['k2']))
 
     @property
     def s_theta_ref1(self):
