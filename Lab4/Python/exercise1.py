@@ -23,6 +23,8 @@ def amplitude_experiments(parameters, x0, time):
     dtheta_amp = np.max(dthetas,axis=0)-np.min(dthetas,axis=0)
     return [theta_amp,dtheta_amp]
 
+
+
 def exercise1():
     """ Exercise 1  """
     biolog.info("Executing Lab 4 : Exercise 1")
@@ -37,6 +39,9 @@ def exercise1():
     t_stop = 5.0
     dt = 0.001
     time = np.arange(t_start, t_stop, dt)
+    
+    parameters.b1=2
+    parameters.b2=2
     
     #Question 1a
     temp = np.size(time)/3
@@ -91,12 +96,7 @@ def exercise1():
         for j,theta_ref in enumerate(range_thetaref):
             parameters.s_theta_ref1=theta_ref
             parameters.s_theta_ref2=theta_ref
-            res_temp = integrate(pendulum_integration, x0, time, args=(parameters, ))
-            temp=np.array(res_temp.state)
-            thetas=temp[:,0]
-            dthetas=temp[:,1]
-            amp_theta[i,j]=max(thetas)-min(thetas)
-            max_speed[i,j]=max(dthetas)
+            [amp_theta[i,j],max_speed[i,j]]=amplitude_experiments(parameters,x0,time)
     plt.figure()
     plt.contourf(range_thetaref,range_k,amp_theta)
     plt.xlabel("Theta ref")
