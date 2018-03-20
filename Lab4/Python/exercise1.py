@@ -12,6 +12,7 @@ DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
 def pendulum_integration(state, time, *args, **kwargs):
     """ Function for system integration """
+    #biolog.warning("Pendulum equation with spring and damper must be implemented")  # l_S
     return pendulum_system(state[0], state[1], *args, **kwargs)[:, 0]
 
 def amplitude_experiments(parameters, x0, time):
@@ -75,6 +76,42 @@ def exercise1():
     plt.figure(4)
     plt.plot(K_range,dtheta_amps)
     plt.legend([r'+$\theta$',r'-$\theta$',r'+$d\theta$',r'-$d\theta$',r'++$d\theta$'])
+    
+    #biolog.warning("Using large time step dt={}".format(dt))
+    
+    x0 = [-np.pi/16, 5.0]
+    
+    range_k=np.arange(0,100,10)
+    range_thetaref=np.arange(-np.pi/4,np.pi/4,0.1)
+    amp_theta=np.zeros([len(range_k),len(range_thetaref)])
+    max_speed =np.zeros([len(range_k),len(range_thetaref)])
+    for i,k in enumerate(range_k):
+        parameters.k1=k
+        parameters.k2=k
+        for j,theta_ref in enumerate(range_thetaref):
+            parameters.s_theta_ref1=theta_ref
+            parameters.s_theta_ref2=theta_ref
+            res_temp = integrate(pendulum_integration, x0, time, args=(parameters, ))
+            temp=np.array(res_temp.state)
+            thetas=temp[:,0]
+            dthetas=temp[:,1]
+            amp_theta[i,j]=max(thetas)-min(thetas)
+            max_speed[i,j]=max(dthetas)
+    plt.figure()
+    plt.contourf(range_thetaref,range_k,amp_theta)
+    plt.xlabel("Theta ref")
+    plt.ylabel("Spring constant K")
+    plt.title("Amplitude")
+    plt.colorbar()
+    plt.show()
+    
+    plt.figure()
+    plt.contourf(range_thetaref,range_k,max_speed)
+    plt.title("Max velocity")
+    plt.xlabel("Theta ref")
+    plt.ylabel("Spring constant K")
+    plt.colorbar()
+    plt.show()
     
     if DEFAULT["save_figures"] is False:
         plt.show()

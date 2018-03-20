@@ -40,7 +40,7 @@ def pendulum_equation(theta, dtheta, parameters=PendulumParameters()):
     if(theta<s_theta_ref2):
         F2 = k2*(s_theta_ref2-theta)
     
-    d2theta = -g/L*sin(theta) + F1 + F2    
+    d2theta = -g/L*sin(theta) + F1 + F2
     
     return d2theta
 
