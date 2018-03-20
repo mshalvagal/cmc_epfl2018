@@ -12,10 +12,15 @@ DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
 def pendulum_integration(state, time, *args, **kwargs):
     """ Function for system integration """
-    biolog.warning(
-        "Pendulum equation with spring and damper must be implemented")  # l_S
     return pendulum_system(state[0], state[1], *args, **kwargs)[:, 0]
 
+def amplitude_experiments(parameters, x0, time):
+    res = integrate(pendulum_integration, x0, time, args=(parameters,))
+    thetas = np.array(res.state)[:,0]
+    dthetas = np.array(res.state)[:,1]
+    theta_amp = np.max(thetas,axis=0)-np.min(thetas,axis=0)
+    dtheta_amp = np.max(dthetas,axis=0)-np.min(dthetas,axis=0)
+    return [theta_amp,dtheta_amp]
 
 def exercise1():
     """ Exercise 1  """
@@ -29,15 +34,48 @@ def exercise1():
     # Simulation Parameters
     t_start = 0.0
     t_stop = 5.0
-    dt = 1.0
-    biolog.warning("Using large time step dt={}".format(dt))
+    dt = 0.001
     time = np.arange(t_start, t_stop, dt)
-    x0 = [0.0, 0.0]
-
-    res = integrate(pendulum_integration, x0, time, args=(parameters, ))
-    res.plot_state("State")
-    res.plot_phase("Phase")
-
+    
+    #Question 1a
+    temp = np.size(time)/3
+    x0 = [0.0, 0.5]
+    for i in range(3):
+        res = integrate(pendulum_integration, x0, time[temp*i:temp*(i+1)], args=(parameters,))
+        x0 = res.state[-1] + 0.05*np.random.random(2)
+        res.plot_state("State")
+        res.plot_phase("Phase")
+    
+    #Question 1b
+    K_range = np.arange(1,21,1)
+    theta_amps = np.zeros((np.size(K_range),4))
+    dtheta_amps = np.zeros((np.size(K_range),4))
+    for i,k in enumerate(K_range):
+        parameters.k1 = k
+        
+        x0 = [1.0, 0.0]
+        theta_amps[i,0],dtheta_amps[i,0] = amplitude_experiments(parameters, x0, time)
+        
+        x0 = [-1.0, 0.0]
+        theta_amps[i,1],dtheta_amps[i,1] = amplitude_experiments(parameters, x0, time)
+        
+        x0 = [1.0, 1.0]
+        theta_amps[i,2],dtheta_amps[i,2] = amplitude_experiments(parameters, x0, time)
+        
+        x0 = [1.0, -1.0]
+        theta_amps[i,3],dtheta_amps[i,3] = amplitude_experiments(parameters, x0, time)
+                
+        x0 = [2.0, 0.0]
+        theta_amps[i,3],dtheta_amps[i,3] = amplitude_experiments(parameters, x0, time)
+    
+    plt.figure(3)
+    plt.plot(K_range,theta_amps)
+    plt.legend([r'+$\theta_1$',r'-$\theta$',r'+$d\theta$',r'-$d\theta$',r'++$d\theta$'])
+    
+    plt.figure(4)
+    plt.plot(K_range,dtheta_amps)
+    plt.legend([r'+$\theta$',r'-$\theta$',r'+$d\theta$',r'-$d\theta$',r'++$d\theta$'])
+    
     if DEFAULT["save_figures"] is False:
         plt.show()
     return

@@ -32,7 +32,17 @@ def pendulum_equation(theta, dtheta, parameters=PendulumParameters()):
         parameters.b1,
         parameters.b2
     )
-    return 0
+    
+    F1 = 0
+    F2 = 0
+    if(theta>s_theta_ref1):
+        F1 = k1*(s_theta_ref1-theta)        
+    if(theta<s_theta_ref2):
+        F2 = k2*(s_theta_ref2-theta)
+    
+    d2theta = -g/L*sin(theta) + F1 + F2    
+    
+    return d2theta
 
 
 def pendulum_system(theta, dtheta, parameters=PendulumParameters()):
