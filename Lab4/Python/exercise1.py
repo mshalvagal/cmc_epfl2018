@@ -2,10 +2,12 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as tck
 from biopack import integrate, DEFAULT, parse_args
 import biolog
 from SystemParameters import PendulumParameters
 from lab4_pendulum import pendulum_system
+from scipy.optimize import root
 
 DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
@@ -25,6 +27,37 @@ def amplitude_experiments(parameters, x0_list, time):
         dtheta_amp[i] = np.max(dthetas,axis=0)-np.min(dthetas,axis=0)
     return [theta_amp/2,dtheta_amp/2]
 
+def equilibrium_func(k2,theta_ref2,parameters):
+    g=parameters.g
+    L=parameters.L
+    sin = parameters.sin
+    theta_ref1 = np.pi/6
+    k1=0#the value of 
+    
+    theta_eq = np.pi/6
+    return g*sin(theta_eq)/L-k1*min(theta_ref1-theta_eq,0)-k2*max(theta_ref2-theta_eq,0)
+
+def plot_solutions_eq(parameters):
+    #before PI/6 no solutions
+    theta_ref2_range = np.arange(np.pi/6+0.01,np.pi/2,0.01)
+    k2_sol = np.zeros([len(theta_ref2_range)])
+    initial_guess = 1
+    for i,theta_ref2 in enumerate(theta_ref2_range):
+        sol = root(equilibrium_func,initial_guess,args=(theta_ref2,parameters),method='hybr')
+        k2_sol[i]=sol.x[0]
+    plt.figure()
+    plt.plot(theta_ref2_range,k2_sol)
+    plt.axvline(x=np.pi/6,color='k',linestyle='--')
+    ax = plt.gca()
+    #ax.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
+    #ax.xaxis.set_major_locator(tck.MultipleLocator(base=0.2))
+    ax.set_xticks([np.pi/6, np.pi/4, np.pi/3, np.pi*2/5,np.pi/2])
+    ax.set_xticklabels([r"$\frac{1}{6}\pi$",r"$\frac{1}{4}\pi$",
+                        r"$\frac{1}{3}\pi$",r"$\frac{2}{5}\pi$",r"$\frac{1}{2}\pi$"])
+    plt.xlabel("Value of theta_ref2 in radians")
+    plt.ylabel("Value of K2")
+    plt.ylim((0,100))
+    plt.show()
 
 
 def exercise1():
@@ -151,5 +184,7 @@ def exercise1():
 
 
 if __name__ == '__main__':
-    exercise1()
+    #exercise1()
+    parameters = PendulumParameters()
+    plot_solutions_eq(parameters)
 
