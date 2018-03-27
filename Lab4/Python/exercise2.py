@@ -8,6 +8,8 @@ from SystemParameters import MuscleParameters, MassParameters
 from lab4_mass import mass_system
 import biolog
 from scipy.integrate import odeint
+
+from operator import add
 # Import muscule model
 import Muscle
 
@@ -102,15 +104,24 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.05, 0.01),
     """
     stretch = np.array(stretch)
 
-    biolog.warning('Exercise 2b isotonic contraction to be implemented')
+    #is it necesary to copy.copy(muscle) in order to copy this object ?
 
     # Time settings
     t_start = 0.0  # Start time
     t_stop = 0.2  # Stop time
     dt = 0.001  # Time step
-
-    biolog.warning("Muscle Isometric exercise not implemented")
-    return None
+    time = np.arange(t_start,t_stop,dt)
+    active_force = []
+    passive_force = []
+    CE_length = []
+    for i,stretch_value in enumerate(stretch):
+        for  j in enumerate(time):
+            res = muscle_integrate(muscle, stretch_value, activation,dt)
+        active_force.append(res['activeForce'])
+        passive_force.append(res['passiveForce'])
+        CE_length.append(res['l_CE'])
+        
+    return active_force, passive_force, CE_length
 
 
 def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
@@ -196,8 +207,64 @@ def exercise2a():
     # Create muscle object
     muscle = Muscle.Muscle(parameters)
 
-    biolog.warning("Isometric muscle contraction to be implemented")
-
+    #biolog.warning("Isometric muscle contraction to be implemented")
+    
+    stretch=np.arange(0.0, 0.05, 0.005)  
+    
+    #Question 2a
+    activation = 0.5
+    active_force, passive_force, CE_length = isometric_contraction(muscle,stretch,activation)
+    
+    plt.figure()
+    plt.plot(stretch,active_force,stretch,passive_force)
+    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force'])
+    plt.xlabel('stretch')
+    plt.show()
+    
+    plt.figure()
+    plt.plot(stretch,CE_length)
+    plt.xlabel('Stretch')
+    plt.ylabel('Length of contractile element')
+    plt.show()
+    
+    plt.figure()
+    plt.plot(stretch,active_force,stretch,passive_force)
+    plt.plot(stretch,map(add,active_force,passive_force))
+    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force'])
+    plt.xlabel('Stretch')
+    plt.show()
+    
+    #Question 2b
+    plt.figure()
+    activation_range = np.arange(1,-0.1,-0.2)
+    legend_list =[]
+    for i, activation in enumerate(activation_range):
+        if (activation<0.01):
+            activation=0
+        active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,activation)
+        plt.plot(stretch,active_force)
+        legend_list.append('Active Force, activation = {0:.1g}'.format(activation))
+    plt.plot(stretch,passive_force)
+    legend_list.append('Passive Force')
+    plt.legend(legend_list)
+    plt.xlabel('Stretch')
+    plt.show()
+    
+    #Question 2c
+    l_opt_range=np.arange(0.05,1,0.2)
+    legend_list_2c =[]
+    plt.figure()
+    for i, l_opt in enumerate(l_opt_range):
+        muscle.l_opt = l_opt
+        active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
+        plt.plot(CE_length,active_force,CE_length,passive_force)
+        legend_list_2c.append('Active Force, l_opt = {0:.2g}'.format(l_opt))
+        legend_list_2c.append('Passive Force, l_opt = {0:.2g}'.format(l_opt))
+    plt.legend(legend_list_2c)
+    plt.xlabel('Length of contractile element')
+    plt.ylim([0,100])
+    plt.show()
+    
     """ Example for plotting graphs using matplotlib. """
     # plt.figure('fig_name')
     # plt.plot(x, y)
@@ -233,7 +300,7 @@ def exercise2b():
 def exercise2():
     """ Exercise 2 """
     exercise2a()
-    exercise2b()
+    #exercise2b()
 
 
 if __name__ == '__main__':
