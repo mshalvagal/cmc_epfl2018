@@ -104,8 +104,6 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.05, 0.01),
     """
     stretch = np.array(stretch)
 
-    #is it necesary to copy.copy(muscle) in order to copy this object ?
-
     # Time settings
     t_start = 0.0  # Start time
     t_stop = 0.2  # Stop time
@@ -178,17 +176,45 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
 
     """
     load = np.array(load)
+    velocity_ce=np.zeros(len(load))
 
     biolog.warning('Exercise 2b isotonic contraction to be implemented')
 
     # Time settings
     t_start = 0.0  # Start time
     t_stop = 0.2  # Stop time
-    dt = 0.001  # Time step
+    my_dt = 0.001  # Time step
+    time = np.arange(t_start,t_stop,my_dt)
 
-    x0 = np.array([0.0, 0.0])  # Initial state of the muscle
-
-    return None
+    x0 = np.array([0.0, 0.0])  # Initial state of the mass (position, velocity)
+    for idx,load_ in enumerate(load):
+       # Iterate over the different muscle stretch values
+        mass_parameters.mass = load_ # Set the mass applied on the muscle
+        state = np.copy(x0) # Reset the state for next iteration
+        
+        for time_ in time:
+             # Integrate for 0.2 seconds
+            # Integration before the quick release
+            res = muscle_integrate (muscle, state[0], activation=1.0,  dt=my_dt)
+        
+        res_vCE=np.zeros(len(time))    
+        for index,time_ in enumerate(time):
+            # Quick Release experiment
+            # Integrate the mass system by applying the muscle force on to it for a time step dt
+            mass_res = odeint(mass_integration, state,  [time_, time_ + my_dt], 
+                                   args=(muscle.force, mass_parameters))
+            state[0] = mass_res[-1, 0] # Update state with final postion of mass
+            state[1] = mass_res[-1, 1] # Update state with final position of velocity
+            # Now update the muscle model with new position of mass
+            res = muscle_integrate(muscle, state[0], activation=1.0, dt=my_dt)
+            # Save the relevant data
+            res_vCE[index] = res['v_CE']
+            
+        if(res['l_MTC'] > muscle_parameters.l_opt + muscle_parameters.l_slack):
+            velocity_ce[idx] = min(res_vCE[:])
+        else:
+            velocity_ce[idx] = max(res_vCE[:])
+    return velocity_ce
 
 
 def exercise2a():
@@ -219,6 +245,7 @@ def exercise2a():
     plt.plot(stretch,active_force,stretch,passive_force)
     plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force'])
     plt.xlabel('stretch')
+    plt.ylabel('Forces in N')
     plt.show()
     
     plt.figure()
@@ -232,6 +259,7 @@ def exercise2a():
     plt.plot(stretch,map(add,active_force,passive_force))
     plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force'])
     plt.xlabel('Stretch')
+    plt.ylabel('Forces in N')
     plt.show()
     
     #Question 2b
@@ -248,21 +276,24 @@ def exercise2a():
     legend_list.append('Passive Force')
     plt.legend(legend_list)
     plt.xlabel('Stretch')
+    plt.ylabel('Forces in N')
     plt.show()
     
     #Question 2c
+    #we should plot it with relative stretch and not absolute stretch.
     l_opt_range=np.arange(0.05,1,0.2)
     legend_list_2c =[]
     plt.figure()
     for i, l_opt in enumerate(l_opt_range):
         muscle.l_opt = l_opt
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
-        plt.plot(CE_length,active_force,CE_length,passive_force)
-        legend_list_2c.append('Active Force, l_opt = {0:.2g}'.format(l_opt))
-        legend_list_2c.append('Passive Force, l_opt = {0:.2g}'.format(l_opt))
-    plt.legend(legend_list_2c)
-    plt.xlabel('Length of contractile element')
-    plt.ylim([0,100])
+        plt.plot(stretch,active_force,stretch,passive_force)
+        legend_list_2c.append('Active Force, l_opt = {0:.2g} m'.format(l_opt))
+        legend_list_2c.append('Passive Force, l_opt = {0:.2g} m'.format(l_opt))
+    plt.legend(legend_list_2c,bbox_to_anchor=(1.04,0.5),loc="center left")
+    plt.xlabel('Stretch')
+    plt.ylabel('Forces in N')
+    plt.ylim([0,1000])
     plt.show()
     
     """ Example for plotting graphs using matplotlib. """
@@ -285,16 +316,25 @@ def exercise2b():
     contracts is of our interest"""
 
     # Defination of muscles
-    muscle_parameters = MuscleParameters()
-    print(muscle_parameters.showParameters())
+    my_muscle_parameters = MuscleParameters()
+    print(my_muscle_parameters.showParameters())
 
-    mass_parameters = MassParameters()
-    print(mass_parameters.showParameters())
+    my_mass_parameters = MassParameters()
+    print(my_mass_parameters.showParameters())
 
     # Create muscle object
-    muscle = Muscle.Muscle(muscle_parameters)
+    muscle = Muscle.Muscle(my_muscle_parameters)
+    
+    #Question 2d
+    my_loads = np.arange(10., 400, 5)
+    CE_velocity = isotonic_contraction(muscle, load=my_loads, 
+                                       muscle_parameters=my_muscle_parameters, 
+                                       mass_parameters=my_mass_parameters)
 
-    biolog.warning("Isotonic muscle contraction to be implemented")
+    plt.figure()
+    plt.plot(my_loads,CE_velocity)
+    plt.xlabel('Load applied in kg')
+    plt.ylabel('Contractile Element max velocity in m/s')
 
 
 def exercise2():
