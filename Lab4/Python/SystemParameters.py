@@ -200,8 +200,8 @@ class PendulumParameters(SystemParameters):
             biolog.warning('Setting bad spring constant. Should be positive!')
         else:
             self.parameters['k1'] = value
-        biolog.info(
-            'Changed spring constant of spring 1 to {} [N/rad]'.format(self.parameters['k1']))
+#        biolog.info(
+#            'Changed spring constant of spring 1 to {} [N/rad]'.format(self.parameters['k1']))
 
     @property
     def k2(self):
@@ -217,8 +217,8 @@ class PendulumParameters(SystemParameters):
             biolog.warning('Setting bad spring constant. Should be positive!')
         else:
             self.parameters['k2'] = value
-        biolog.info(
-            'Changed spring constant of spring 2 to {} [N/rad]'.format(self.parameters['k2']))
+#        biolog.info(
+#            'Changed spring constant of spring 2 to {} [N/rad]'.format(self.parameters['k2']))
 
     @property
     def s_theta_ref1(self):
@@ -231,9 +231,9 @@ class PendulumParameters(SystemParameters):
         """ Keyword Arguments:
         value -- Set the value of spring 1 reference angle [rad] """
         self.parameters['s_theta_ref1'] = value
-        biolog.info(
-            'Changed spring 1 reference angle to {} [rad]'.format(
-                self.parameters['s_theta_ref1']))
+#        biolog.info(
+#            'Changed spring 1 reference angle to {} [rad]'.format(
+#                self.parameters['s_theta_ref1']))
 
     @property
     def s_theta_ref2(self):
@@ -246,9 +246,9 @@ class PendulumParameters(SystemParameters):
         """ Keyword Arguments:
         value -- Set the value of spring 2 reference angle [rad] """
         self.parameters['s_theta_ref2'] = value
-        biolog.info(
-            'Changed spring 2 reference angle to {} [rad]'.format(
-                self.parameters['s_theta_ref2']))
+#        biolog.info(
+#            'Changed spring 2 reference angle to {} [rad]'.format(
+#                self.parameters['s_theta_ref2']))
 
     @property
     def b1(self):
@@ -264,8 +264,8 @@ class PendulumParameters(SystemParameters):
             biolog.warning('Setting bad damping values. Should be positive!')
         else:
             self.parameters['b1'] = value
-        biolog.info(
-            'Changed damping constant for damper 1 to {} [N-s/rad]'.format(self.parameters['b1']))
+#        biolog.info(
+#            'Changed damping constant for damper 1 to {} [N-s/rad]'.format(self.parameters['b1']))
 
     @property
     def b2(self):
@@ -281,8 +281,8 @@ class PendulumParameters(SystemParameters):
             biolog.warning('Setting bad damping values. Should be positive!')
         else:
             self.parameters['b2'] = value
-        biolog.info(
-            'Changed damping constant for damper 2 to {} [N-s/rad]'.format(self.parameters['b2']))
+#        biolog.info(
+#            'Changed damping constant for damper 2 to {} [N-s/rad]'.format(self.parameters['b2']))
 
     def showParameters(self):
         return self.msg(self.parameters, self.units)
