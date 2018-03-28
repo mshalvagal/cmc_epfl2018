@@ -25,6 +25,35 @@ def amplitude_experiments(parameters, x0_list, time):
         dtheta_amp[i] = np.max(dthetas,axis=0)-np.min(dthetas,axis=0)
     return [theta_amp/2,dtheta_amp/2]
 
+def ticks_format_func(value, tick_number):
+    # find number of multiples of pi/4
+    N = int(np.round(4 * value / np.pi))
+    if N == 0:
+        return "0"
+    elif N == 1:
+        return r"$\pi/4$"
+    elif N == 2:
+        return r"$\pi/2$"
+    elif N == 3:
+        return r"$\frac{3\pi}{4}$"
+    elif N == -1:
+        return r"$-\pi/4$"
+    elif N % 2 > 0:
+        return r"${0}\pi/4$".format(N)
+    elif N % 4 > 0:
+        if N/2 == 1:
+            return r"$\pi/2$"
+        elif N/2 == -1:
+            return r"$-\pi/2$"
+        else:
+            return r"${0}\pi/2$".format(N/2)
+    else:
+        if N/4 == 1:
+            return r"$\pi$"
+        elif N/4 == 1:
+            return r"$-\pi$"
+        else:
+            return r"${0}\pi$".format(N/4)
 
 
 def exercise1():
@@ -52,7 +81,7 @@ def exercise1():
         res.plot_phase("Phase")
     
     #Question 1c
-    x0_list = [[1.0, 0.0],[-1.0, 0.0],[1.0, 1.0],[1.0, -1.0],[1.5, 0.0]]
+    x0_list = [[np.pi/4, 0.0],[-np.pi/4, 0.0],[np.pi/4, np.pi/4],[np.pi/4, -np.pi/4],[np.pi/2, 0.0]]
     parameters = PendulumParameters()
     parameters.b1 = 0.0
     parameters.b2 = 0.0
@@ -64,31 +93,37 @@ def exercise1():
         theta_amps[i,:],dtheta_amps[i,:] = amplitude_experiments(parameters, x0_list, time)
     
     plt.figure()
-    plt.plot(K_range,theta_amps*180/np.pi,linewidth=2)
+    plt.plot(K_range,theta_amps,linewidth=2)
     plt.grid()
-    plt.legend([r'$x_0=[1.0, 0.0]$',r'$x_0=[-1.0, 0.0]$',r'$x_0=[1.0, 1.0]$',r'$x_0=[1.0, -1.0]$',r'$x_0=[1.5, 0.0]$'],
+    plt.legend([r'$x_0=[\pi/4, 0.0]$',r'$x_0=[-\pi/4, 0.0]$',r'$x_0=[\pi/4, \pi/4]$',r'$x_0=[\pi/4, -\pi/4]$',r'$x_0=[\pi/2, 0.0]$'],
                bbox_to_anchor=(1.04,0.5), loc="center left")
 #    plt.ylim(np.min(theta_amps.flatten()),np.max(theta_amps.flatten()))
     plt.title('Effect of changing one spring constant on the amplitude of oscillations',fontsize=12)
     plt.xlabel(r'$K_1$ [N/rad]')
-    plt.ylabel('Amplitude of oscillation [degrees]')
+    plt.ylabel('Amplitude of oscillation [rad]')
+    ax = plt.axes()
+    ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.show()
     
     plt.figure()
     plt.plot(K_range,dtheta_amps,linewidth=2)
     plt.grid()
-    plt.legend([r'$x_0=[1.0, 0.0]$',r'$x_0=[-1.0, 0.0]$',r'$x_0=[1.0, 1.0]$',r'$x_0=[1.0, -1.0]$',r'$x_0=[1.5, 0.0]$'],
+    plt.legend([r'$x_0=[\pi/4, 0.0]$',r'$x_0=[-\pi/4, 0.0]$',r'$x_0=[\pi/4, \pi/4]$',r'$x_0=[\pi/4, -\pi/4]$',r'$x_0=[\pi/2, 0.0]$'],
                bbox_to_anchor=(1.04,0.5), loc="center left")
     plt.title('Effect of changing one spring constant on the amplitude of velocities',fontsize=12)
     plt.xlabel(r'$K_1$ [N/rad]')
     plt.ylabel('Amplitude of velocity [rad/s]')
+    ax = plt.axes()
+    ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.show()
     
     
     parameters = PendulumParameters()
     parameters.b1 = 0.0
     parameters.b2 = 0.0
-    theta_ref_range = np.linspace(0,np.pi/2,20)
+    theta_ref_range = np.linspace(-np.pi/2,np.pi/2,20)
     theta_amps = np.zeros((np.size(K_range),5))
     dtheta_amps = np.zeros((np.size(K_range),5))
     for i,theta_ref in enumerate(theta_ref_range):
@@ -96,30 +131,40 @@ def exercise1():
         theta_amps[i,:],dtheta_amps[i,:] = amplitude_experiments(parameters, x0_list, time)
     
     plt.figure()
-    plt.plot(theta_ref_range*180/np.pi,theta_amps*180/np.pi,linewidth=2)
+    plt.plot(theta_ref_range,theta_amps,linewidth=2)
     plt.grid()
-    plt.legend([r'$x_0=[1.0, 0.0]$',r'$x_0=[-1.0, 0.0]$',r'$x_0=[1.0, 1.0]$',r'$x_0=[1.0, -1.0]$',r'$x_0=[1.5, 0.0]$'],
+    plt.legend([r'$x_0=[\pi/4, 0.0]$',r'$x_0=[-\pi/4, 0.0]$',r'$x_0=[\pi/4, \pi/4]$',r'$x_0=[\pi/4, -\pi/4]$',r'$x_0=[\pi/2, 0.0]$'],
                bbox_to_anchor=(1.04,0.5), loc="center left")
 #    plt.ylim(np.min(theta_amps.flatten()),np.max(theta_amps.flatten()))
     plt.title('Effect of changing one reference angle on the amplitude of oscillations',fontsize=12)
-    plt.xlabel(r'$\theta_{ref1}$ [degrees]')
-    plt.ylabel('Amplitude of oscillation [degrees]')
+    plt.xlabel(r'$\theta_{ref1}$ [rad]')
+    plt.ylabel('Amplitude of oscillation [rad]')
+    ax = plt.axes()
+    ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
+    ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.show()
     
     plt.figure()
-    plt.plot(theta_ref_range*180/np.pi,dtheta_amps,linewidth=2)
+    plt.plot(theta_ref_range,dtheta_amps,linewidth=2)
     plt.grid()
-    plt.legend([r'$x_0=[1.0, 0.0]$',r'$x_0=[-1.0, 0.0]$',r'$x_0=[1.0, 1.0]$',r'$x_0=[1.0, -1.0]$',r'$x_0=[1.5, 0.0]$'],
+    plt.legend([r'$x_0=[\pi/4, 0.0]$',r'$x_0=[-\pi/4, 0.0]$',r'$x_0=[\pi/4, \pi/4]$',r'$x_0=[\pi/4, -\pi/4]$',r'$x_0=[\pi/2, 0.0]$'],
                bbox_to_anchor=(1.04,0.5), loc="center left")
     plt.title('Effect of changing one reference angle on the amplitude of velocities',fontsize=12)
-    plt.xlabel(r'$\theta_{ref1}$ [degrees]')
+    plt.xlabel(r'$\theta_{ref1}$ [rad]')
     plt.ylabel('Amplitude of velocity [rad/s]')
+    ax = plt.axes()
+    ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
+    ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.show()
     
-    x0 = [[1.5, 0.0]]
+    x0 = [[np.pi/6, 0.0]]
     
     range_k=np.arange(1,100,5)
-    range_thetaref=np.arange(-np.pi/2,np.pi/2,0.1)
+    range_thetaref=np.arange(-np.pi/2,np.pi/2+0.1,0.1)
     amp_theta=np.zeros([len(range_k),len(range_thetaref)])
     max_speed =np.zeros([len(range_k),len(range_thetaref)])
     for i,k in enumerate(range_k):
@@ -131,20 +176,40 @@ def exercise1():
             [amp_theta[i,j],max_speed[i,j]]=amplitude_experiments(parameters,x0,time)
     plt.figure()
     plt.contourf(range_thetaref,range_k,amp_theta)
-    plt.xlabel("Theta ref")
-    plt.ylabel("Spring constant K")
-    plt.title("Amplitude")
+    plt.xlabel(r'$\theta_{ref1}$ [rad]')
+    plt.ylabel('Spring constant K [N/rad]')
+    plt.title('Amplitude of oscillation [rad]')    
+    ax = plt.axes()
+    ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.colorbar()
     plt.show()
     
     plt.figure()
     plt.contourf(range_thetaref,range_k,max_speed)
-    plt.title("Max velocity")
-    plt.xlabel("Theta ref")
-    plt.ylabel("Spring constant K")
+    plt.title('Max velocity [rad/s]')
+    plt.xlabel(r'$\theta_{ref1}$ [rad]')
+    plt.ylabel('Spring constant K [N/rad]')
+    ax = plt.axes()
+    ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.colorbar()
     plt.show()
-    
+
+    #Question 1d
+    t_start = 0.0
+    t_stop = 50.0
+    dt = 0.01
+    time = np.arange(t_start, t_stop, dt)
+    parameters = PendulumParameters()
+    temp = np.size(time)/10
+    x0 = [0.0, 0.5]
+    for i in range(10):
+        res = integrate(pendulum_integration, x0, time[temp*i:temp*(i+1)], args=(parameters,))
+        x0 = res.state[-1] + 0.05*np.random.random(2) #Introduce random perturbations by abruptly changing the state
+        res.plot_state("State")
+        res.plot_phase("Phase")
+
     if DEFAULT["save_figures"] is False:
         plt.show()
     return
