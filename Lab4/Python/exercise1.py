@@ -2,10 +2,12 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as tck
 from biopack import integrate, DEFAULT, parse_args
 import biolog
 from SystemParameters import PendulumParameters
 from lab4_pendulum import pendulum_system
+from scipy.optimize import root
 
 DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
@@ -54,6 +56,63 @@ def ticks_format_func(value, tick_number):
             return r"$-\pi$"
         else:
             return r"${0}\pi$".format(N/4)
+
+def equilibrium_func(k2,theta_ref2,parameters,k1,theta_ref1):
+    g=parameters.g
+    L=parameters.L
+    sin = parameters.sin
+    
+    theta_eq = np.pi/6
+    return g*sin(theta_eq)/L-k1*min(theta_ref1-theta_eq,0)-k2*max(theta_ref2-theta_eq,0)
+
+def plot_solutions_eq(parameters):
+    #before PI/6 no solutions
+    theta_ref2_range = np.arange(np.pi/6+0.01,np.pi/2,0.01)
+    k2_sol = np.zeros([len(theta_ref2_range)])
+    initial_guess = 1
+    
+    legend_list =[]
+    plt.figure()
+    
+    #first couple of values
+    theta_ref1 = np.pi/6
+    k1=0
+    for i,theta_ref2 in enumerate(theta_ref2_range):
+        sol = root(equilibrium_func,initial_guess,args=(theta_ref2,parameters,k1,theta_ref1),method='hybr')
+        k2_sol[i]=sol.x[0]
+    plt.plot(theta_ref2_range,k2_sol)
+    legend_list.append(r"Solutions for $\theta_{ref1}=\frac{\pi}{6}$")
+    
+    theta_ref1 = 0
+    k1=20
+    for i,theta_ref2 in enumerate(theta_ref2_range):
+        sol = root(equilibrium_func,initial_guess,args=(theta_ref2,parameters,k1,theta_ref1),method='hybr')
+        k2_sol[i]=sol.x[0]
+    plt.plot(theta_ref2_range,k2_sol)
+    legend_list.append(r"Solutions for $\theta_{ref1}=0$, $K_1=20$")
+    
+    theta_ref1 = 0
+    k1=40
+    for i,theta_ref2 in enumerate(theta_ref2_range):
+        sol = root(equilibrium_func,initial_guess,args=(theta_ref2,parameters,k1,theta_ref1),method='hybr')
+        k2_sol[i]=sol.x[0]
+    plt.plot(theta_ref2_range,k2_sol)
+    legend_list.append(r"Solutions for $\theta_{ref1}=0$, $K_1=40$")
+    
+    #adding nice things for the graph
+    plt.axvline(x=np.pi/6,color='k',linestyle='--')
+    ax = plt.gca()
+    #ax.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
+    #ax.xaxis.set_major_locator(tck.MultipleLocator(base=0.2))
+    ax.set_xticks([np.pi/6, np.pi/4, np.pi/3, np.pi*2/5,np.pi/2])
+    ax.set_xticklabels([r"$\frac{\pi}{6}$",r"$\frac{\pi}{4}$",
+                        r"$\frac{\pi}{3}$",r"$\frac{\pi}{5}$",r"$\frac{\pi}{2}$"])
+    plt.xlabel(r"Value of $\theta_{ref2}$ in radians")
+    plt.ylabel(r"Value of spring constant $K_2$")
+    #plt.title(r"Solution $\theta_{ref2}$ for an equilibrium position at $\frac{\pi}{6}$")
+    plt.ylim((0,100))
+    plt.legend(legend_list)
+    plt.show()
 
 
 def exercise1():
@@ -217,4 +276,6 @@ def exercise1():
 
 if __name__ == '__main__':
     exercise1()
+    parameters = PendulumParameters()
+    plot_solutions_eq(parameters)
 
