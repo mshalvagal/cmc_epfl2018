@@ -23,6 +23,9 @@ plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
 plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
 plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rcParams.update({'figure.autolayout': True}) # to get better graphs at save
+plt.rcParams.update({'savefig.dpi': 500}) #set resolution for saving figures
+plt.rcParams.update({'savefig.bbox': 'tight'}) #to include legends saving figures
 
 
 def mass_integration(state, time, *args):
@@ -32,7 +35,7 @@ def mass_integration(state, time, *args):
     return mass_system(state[0], state[1], force, mass_parameters)
 
 
-def muscle_integrate(muscle, deltaLength, activation=0.05, dt=0.001):
+def muscle_integrate(muscle, deltaLength, activation, dt):
     """ Function steps or integrates the muscle model by the specified time_step
     dt.
 
@@ -122,7 +125,7 @@ def isometric_contraction(muscle, stretch=np.arange(0.0, 0.05, 0.01),
     return active_force, passive_force, CE_length
 
 
-def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
+def isotonic_contraction(muscle, activation, load=np.arange(1., 100, 10),
                          muscle_parameters=MuscleParameters(),
                          mass_parameters=MassParameters()):
     """ This function implements the isotonic contraction
@@ -178,12 +181,12 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
     load = np.array(load)
     velocity_ce=np.zeros(len(load))
 
-    biolog.warning('Exercise 2b isotonic contraction to be implemented')
+    #biolog.warning('Exercise 2b isotonic contraction to be implemented')
 
     # Time settings
     t_start = 0.0  # Start time
     t_stop = 0.2  # Stop time
-    my_dt = 0.001  # Time step
+    my_dt = 0.0005  # Time step
     time = np.arange(t_start,t_stop,my_dt)
 
     x0 = np.array([0.0, 0.0])  # Initial state of the mass (position, velocity)
@@ -195,7 +198,7 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
         for time_ in time:
              # Integrate for 0.2 seconds
             # Integration before the quick release
-            res = muscle_integrate (muscle, state[0], activation=1.0,  dt=my_dt)
+            res = muscle_integrate (muscle, state[0], activation,  my_dt)
         
         res_vCE=np.zeros(len(time))    
         for index,time_ in enumerate(time):
@@ -206,13 +209,18 @@ def isotonic_contraction(muscle, load=np.arange(1., 100, 10),
             state[0] = mass_res[-1, 0] # Update state with final postion of mass
             state[1] = mass_res[-1, 1] # Update state with final position of velocity
             # Now update the muscle model with new position of mass
-            res = muscle_integrate(muscle, state[0], activation=1.0, dt=my_dt)
+            res = muscle_integrate(muscle, state[0], activation, my_dt)
             # Save the relevant data
             res_vCE[index] = res['v_CE']
             
         if(res['l_MTC'] > muscle_parameters.l_opt + muscle_parameters.l_slack):
+            #the muscle length at the end is superior to its"initial length", it is stretched
+            #and has not been able to pull the mass up. It has been lengthening and the max
+            #speed is negative            
             velocity_ce[idx] = min(res_vCE[:])
         else:
+            #the muscle has enough force to hold the mass, its has pulled up the mass
+            # and the max velocity is positive.
             velocity_ce[idx] = max(res_vCE[:])
     return velocity_ce
 
@@ -241,27 +249,29 @@ def exercise2a():
     activation = 0.5
     active_force, passive_force, CE_length = isometric_contraction(muscle,stretch,activation)
     
-    plt.figure()
-    plt.plot(stretch,active_force,stretch,passive_force)
-    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force'])
-    plt.xlabel('stretch')
-    plt.ylabel('Forces in N')
-    plt.show()
+    #plt.figure()
+    #plt.plot(stretch,active_force,stretch,passive_force)
+    #plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force'])
+    #plt.xlabel('stretch')
+    #plt.ylabel('Forces in N')
+    #plt.show()
     
-    plt.figure()
-    plt.plot(stretch,CE_length)
-    plt.xlabel('Stretch')
-    plt.ylabel('Length of contractile element')
-    plt.show()
+    #plt.figure()
+    #plt.plot(stretch,CE_length)
+    #plt.xlabel('Stretch')
+    #plt.ylabel('Length of contractile element')
+    #plt.show()
     
     plt.figure()
     plt.plot(stretch,active_force,stretch,passive_force)
     plt.plot(stretch,map(add,active_force,passive_force))
-    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force'])
-    plt.xlabel('Stretch')
+    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force'],
+                bbox_to_anchor=(1.04,0.5), loc="center left")
+    plt.xlabel('Absolute Stretch in meters')
     plt.ylabel('Forces in N')
+    plt.savefig('2_a.png')
     plt.show()
-    
+ 
     #Question 2b
     plt.figure()
     activation_range = np.arange(1,-0.1,-0.2)
@@ -274,39 +284,32 @@ def exercise2a():
         legend_list.append('Active Force, activation = {0:.1g}'.format(activation))
     plt.plot(stretch,passive_force)
     legend_list.append('Passive Force')
-    plt.legend(legend_list)
+    plt.legend(legend_list,bbox_to_anchor=(1.04,0.5), loc="center left")
     plt.xlabel('Stretch')
     plt.ylabel('Forces in N')
+    plt.savefig('2_b.png')
     plt.show()
-    
+
     #Question 2c
     #we should plot it with relative stretch and not absolute stretch.
     l_opt_range=np.arange(0.05,1,0.2)
+    relative_stretch=np.arange(0,0.6,0.05)
+    #relative_stretch relatively to l_opt
     legend_list_2c =[]
     plt.figure()
     for i, l_opt in enumerate(l_opt_range):
         muscle.l_opt = l_opt
+        stretch=l_opt*relative_stretch
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
-        plt.plot(stretch,active_force,stretch,passive_force)
+        plt.plot(relative_stretch*100,active_force,relative_stretch*100,passive_force)
         legend_list_2c.append('Active Force, l_opt = {0:.2g} m'.format(l_opt))
         legend_list_2c.append('Passive Force, l_opt = {0:.2g} m'.format(l_opt))
     plt.legend(legend_list_2c,bbox_to_anchor=(1.04,0.5),loc="center left")
-    plt.xlabel('Stretch')
+    plt.xlabel('Relative Stretch in %')
     plt.ylabel('Forces in N')
-    plt.ylim([0,1000])
-    plt.show()
-    
-    """ Example for plotting graphs using matplotlib. """
-    # plt.figure('fig_name')
-    # plt.plot(x, y)
-    # plt.plot(x1, y1)
-    # plt.title('plot_title')
-    # plt.xlabel('x-label')
-    # plt.ylabel('y-label')
-    # plt.legend(('legend'))
-    # plt.grid()
-    # save_figure('fig_name')
-
+    plt.ylim([0,1250])
+    plt.savefig('2_c.png')
+    plt.show()  
 
 def exercise2b():
     """ Exercise 2b
@@ -326,21 +329,52 @@ def exercise2b():
     muscle = Muscle.Muscle(my_muscle_parameters)
     
     #Question 2d
-    my_loads = np.arange(10., 400, 5)
-    CE_velocity = isotonic_contraction(muscle, load=my_loads, 
+    my_loads = np.arange(1., 270, 1)
+    activation = 1.0
+    CE_velocity = isotonic_contraction(muscle, activation, load=my_loads, 
                                        muscle_parameters=my_muscle_parameters, 
                                        mass_parameters=my_mass_parameters)
 
     plt.figure()
-    plt.plot(my_loads,CE_velocity)
-    plt.xlabel('Load applied in kg')
-    plt.ylabel('Contractile Element max velocity in m/s')
+    plt.plot(CE_velocity,my_loads)
+    plt.xlabel('Contractile Element max velocity in m/s')
+    plt.axhline(y=my_muscle_parameters.f_max/my_mass_parameters.g, 
+                linewidth=1,color='k', linestyle='--')
+    plt.axvline(x=0,linewidth=1,color='k',linestyle='--')
+    plt.ylabel('Load applied in kg')
+    plt.savefig('2_d.png')
+    plt.show()      
+    
+    #Question 2f
+    activation_2 = 0.5
+    my_loads_2 = np.arange(1., 165, 1)
+    CE_velocity_2 = isotonic_contraction(muscle, activation_2, load=my_loads_2, 
+                                       muscle_parameters=my_muscle_parameters, 
+                                       mass_parameters=my_mass_parameters)
+    
+    activation_3 = 0.1
+    my_loads_3 = np.arange(1., 70, 1)
+    CE_velocity_3 = isotonic_contraction(muscle, activation_3, load=my_loads_3, 
+                                       muscle_parameters=my_muscle_parameters, 
+                                       mass_parameters=my_mass_parameters)
+
+    plt.figure()
+    plt.plot(CE_velocity,my_loads)
+    plt.plot(CE_velocity_2,my_loads_2)
+    plt.plot(CE_velocity_3,my_loads_3)
+    plt.legend(['For activation = {}'.format(activation),
+                'For activation = {}'.format(activation_2),
+                'For activation = {}'.format(activation_3)])
+    plt.xlabel('Contractile Element max velocity in m/s')
+    plt.ylabel('Load applied in kg')
+    plt.savefig('2_f.png')
+    plt.show()  
 
 
 def exercise2():
     """ Exercise 2 """
     exercise2a()
-    #exercise2b()
+    exercise2b()
 
 
 if __name__ == '__main__':

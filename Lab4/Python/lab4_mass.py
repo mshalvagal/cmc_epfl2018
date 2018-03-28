@@ -9,7 +9,7 @@ def mass_equation(pos, vel, force, mass_params):
     g=mass_params.g
     load=mass_params.mass
     #biolog.warning("Implement the mass and muscle equation")
-    return -g+force/load
+    return g-force/load
 
 
 def mass_system(pos, vel, force, mass_params):

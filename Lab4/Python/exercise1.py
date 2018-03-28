@@ -11,6 +11,18 @@ from scipy.optimize import root
 
 DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
+# Global settings for plotting
+# You may change as per your requirement
+plt.rc('lines', linewidth=2.0)
+plt.rc('font', size=12.0)
+plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rcParams.update({'figure.autolayout': True}) # to get better graphs at save
+plt.rcParams.update({'savefig.dpi': 500}) #set resolution for saving figures
+plt.rcParams.update({'savefig.bbox': 'tight'}) #to include legends saving figures
+
 
 def pendulum_integration(state, time, *args, **kwargs):
     """ Function for system integration """
@@ -82,6 +94,7 @@ def plot_solutions_eq(parameters):
     #plt.title(r"Solution $\theta_{ref2}$ for an equilibrium position at $\frac{\pi}{6}$")
     plt.ylim((0,100))
     plt.legend(legend_list)
+    plt.savefig('1_e.png')
     plt.show()
 
 
@@ -130,6 +143,7 @@ def exercise1():
     plt.title('Effect of changing one spring constant on the amplitude of oscillations',fontsize=12)
     plt.xlabel(r'$K_1$ [N/rad]')
     plt.ylabel('Amplitude of oscillation [degrees]')
+    plt.savefig('1_c1.png')
     plt.show()
     
     plt.figure()
@@ -140,6 +154,7 @@ def exercise1():
     plt.title('Effect of changing one spring constant on the amplitude of velocities',fontsize=12)
     plt.xlabel(r'$K_1$ [N/rad]')
     plt.ylabel('Amplitude of velocity [rad/s]')
+    plt.savefig('1_c2.png')
     plt.show()
     
     
@@ -203,13 +218,14 @@ def exercise1():
     plt.colorbar()
     plt.show()
     
+    #question 1e
+    parameters = PendulumParameters()
+    plot_solutions_eq(parameters)
+    
     if DEFAULT["save_figures"] is False:
         plt.show()
     return
 
 
 if __name__ == '__main__':
-    #exercise1()
-    parameters = PendulumParameters()
-    plot_solutions_eq(parameters)
-
+    exercise1()
