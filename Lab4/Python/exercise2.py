@@ -16,7 +16,6 @@ import Muscle
 DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
 # Global settings for plotting
-# You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
 plt.rc('font', size=12.0)
 plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
@@ -240,13 +239,11 @@ def exercise2a():
 
     # Create muscle object
     muscle = Muscle.Muscle(parameters)
-
     #biolog.warning("Isometric muscle contraction to be implemented")
-    
-    stretch=np.arange(0.0, 0.05, 0.005)  
-    
+        
     #Question 2a
     activation = 0.5
+    stretch=np.arange(0.0, 0.05, 0.001)      
     active_force, passive_force, CE_length = isometric_contraction(muscle,stretch,activation)
     
     #plt.figure()
@@ -274,7 +271,7 @@ def exercise2a():
  
     #Question 2b
     plt.figure()
-    activation_range = np.arange(1,-0.1,-0.2)
+    activation_range = np.arange(1,-0.1,-0.25)
     legend_list =[]
     for i, activation in enumerate(activation_range):
         if (activation<0.01):
@@ -291,9 +288,9 @@ def exercise2a():
     plt.show()
 
     #Question 2c
-    #we should plot it with relative stretch and not absolute stretch.
-    l_opt_range=np.arange(0.05,1,0.2)
-    relative_stretch=np.arange(0,0.6,0.05)
+    #we plot it with relative stretch and not absolute stretch.
+    l_opt_range=np.array([0.01,0.1,0.5]) #0.11 is the default fiber length
+    relative_stretch=np.arange(0,1,0.02)
     #relative_stretch relatively to l_opt
     legend_list_2c =[]
     plt.figure()
@@ -302,8 +299,8 @@ def exercise2a():
         stretch=l_opt*relative_stretch
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
         plt.plot(relative_stretch*100,active_force,relative_stretch*100,passive_force)
-        legend_list_2c.append('Active Force, l_opt = {0:.2g} m'.format(l_opt))
-        legend_list_2c.append('Passive Force, l_opt = {0:.2g} m'.format(l_opt))
+        legend_list_2c.append(r'Active Force, l_opt = {} cm'.format(l_opt*100))
+        legend_list_2c.append(r'Passive Force, l_opt = {} cm'.format(l_opt*100))
     plt.legend(legend_list_2c,bbox_to_anchor=(1.04,0.5),loc="center left")
     plt.xlabel('Relative Stretch in %')
     plt.ylabel('Forces in N')

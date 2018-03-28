@@ -12,7 +12,6 @@ from scipy.optimize import root
 DEFAULT["label"] = [r"$\theta$ [rad]", r"$d\theta/dt$ [rad/s]"]
 
 # Global settings for plotting
-# You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
 plt.rc('font', size=12.0)
 plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
@@ -124,6 +123,7 @@ def plot_solutions_eq(parameters):
     #plt.title(r"Solution $\theta_{ref2}$ for an equilibrium position at $\frac{\pi}{6}$")
     plt.ylim((0,100))
     plt.legend(legend_list)
+    plt.savefig('1_e.png')
     plt.show()
 
 
@@ -175,6 +175,7 @@ def exercise1():
     ax = plt.axes()
     ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
     ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
+    plt.savefig('1_c1.png')
     plt.show()
     
     plt.figure()
@@ -188,6 +189,7 @@ def exercise1():
     ax = plt.axes()
     ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
     ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
+    plt.savefig('1_c2.png')
     plt.show()
     
     
@@ -215,6 +217,7 @@ def exercise1():
     ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
     ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
+    plt.savefig('1_c3.png')
     plt.show()
     
     plt.figure()
@@ -230,6 +233,7 @@ def exercise1():
     ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     ax.yaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
     ax.yaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
+    plt.savefig('1_c4.png')
     plt.show()
     
     x0 = [[np.pi/6, 0.0]]
@@ -254,6 +258,7 @@ def exercise1():
     ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
     ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.colorbar()
+    plt.savefig('1_b1.png')
     plt.show()
     
     plt.figure()
@@ -265,6 +270,7 @@ def exercise1():
     ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 4))
     ax.xaxis.set_major_formatter(plt.FuncFormatter(ticks_format_func))
     plt.colorbar()
+    plt.savefig('1_b2.png')
     plt.show()
 
     #Question 1d
@@ -285,8 +291,9 @@ def exercise1():
         plt.show()
     return
 
+    #Question 1e
+    parameters = PendulumParameters()
+    plot_solutions_eq(parameters)
 
 if __name__ == '__main__':
     exercise1()
-    parameters = PendulumParameters()
-    plot_solutions_eq(parameters)
