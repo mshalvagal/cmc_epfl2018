@@ -339,7 +339,7 @@ def exercise2b():
     muscle = Muscle.Muscle(my_muscle_parameters)
     
     #Question 2d
-    my_loads = np.arange(1., 270, 1)
+    my_loads = np.arange(1., 300, 1)
     activation = 1.0
     CE_velocity = isotonic_contraction(muscle, activation, load=my_loads, 
                                        muscle_parameters=my_muscle_parameters, 
@@ -356,15 +356,20 @@ def exercise2b():
     plt.show()      
     
     #Question 2f
-    activation_2 = 0.5
-    my_loads_2 = np.arange(1., 165, 1)
+    activation_2 = 0.8
+    my_loads_2 = np.arange(1., 250, 1)
     CE_velocity_2 = isotonic_contraction(muscle, activation_2, load=my_loads_2, 
+                                       muscle_parameters=my_muscle_parameters, 
+                                       mass_parameters=my_mass_parameters)    
+    activation_3 = 0.5
+    my_loads_3 = np.arange(1., 165, 1)
+    CE_velocity_3 = isotonic_contraction(muscle, activation_3, load=my_loads_3, 
                                        muscle_parameters=my_muscle_parameters, 
                                        mass_parameters=my_mass_parameters)
     
-    activation_3 = 0.1
-    my_loads_3 = np.arange(1., 70, 1)
-    CE_velocity_3 = isotonic_contraction(muscle, activation_3, load=my_loads_3, 
+    activation_4 = 0.2
+    my_loads_4 = np.arange(1., 80, 1)
+    CE_velocity_4 = isotonic_contraction(muscle, activation_4, load=my_loads_4, 
                                        muscle_parameters=my_muscle_parameters, 
                                        mass_parameters=my_mass_parameters)
 
@@ -372,13 +377,30 @@ def exercise2b():
     plt.plot(CE_velocity,my_loads)
     plt.plot(CE_velocity_2,my_loads_2)
     plt.plot(CE_velocity_3,my_loads_3)
+    plt.plot(CE_velocity_4,my_loads_4)
     plt.legend(['For activation = {}'.format(activation),
                 'For activation = {}'.format(activation_2),
-                'For activation = {}'.format(activation_3)])
+                'For activation = {}'.format(activation_3),
+                'For activation = {}'.format(activation_4)])
     plt.xlabel('Contractile Element max velocity in m/s')
     plt.ylabel('Load applied in kg')
     plt.savefig('2_f.png')
     plt.show()  
+    
+    plt.figure()
+    plt.plot(CE_velocity,my_loads/activation)
+    plt.plot(CE_velocity_2,my_loads_2/activation_2)
+    plt.plot(CE_velocity_3,my_loads_3/activation_3)
+    plt.plot(CE_velocity_4,my_loads_4/activation_4)
+    plt.legend(['For activation = {}'.format(activation),
+                'For activation = {}'.format(activation_2),
+                'For activation = {}'.format(activation_3),
+                'For activation = {}'.format(activation_4)])
+    plt.xlabel('Contractile Element max velocity in m/s')
+    plt.ylabel('Load applied in kg / Activation')
+    plt.savefig('2_f_2.png')
+    plt.show()
+
 
 
 def exercise2():
