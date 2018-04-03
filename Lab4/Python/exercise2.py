@@ -243,7 +243,7 @@ def exercise2a():
         
     #Question 2a
     activation = 0.5
-    stretch=np.arange(0.0, 0.05, 0.001)      
+    stretch=np.arange(0.0, 0.06, 0.001)      
     active_force, passive_force, CE_length = isometric_contraction(muscle,stretch,activation)
     
     #plt.figure()
@@ -278,13 +278,26 @@ def exercise2a():
             activation=0
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,activation)
         plt.plot(stretch,active_force)
-        legend_list.append('Active Force, activation = {0:.1g}'.format(activation))
+        legend_list.append('Active Force, activation = {0:.2g}'.format(activation))
     plt.plot(stretch,passive_force)
     legend_list.append('Passive Force')
     plt.legend(legend_list,bbox_to_anchor=(1.04,0.5), loc="center left")
-    plt.xlabel('Stretch')
+    plt.xlabel('Absolute Stretch in meters')
     plt.ylabel('Forces in N')
     plt.savefig('2_b.png')
+    plt.show()
+    
+    plt.figure()
+    activation_range = np.arange(1,0.1,-0.25)
+    legend_list =[]
+    for i, activation in enumerate(activation_range):
+        active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,activation)
+        plt.plot(stretch,active_force/activation)
+        legend_list.append('Active Force / Activation, activation = {0:.2g}'.format(activation))
+    plt.legend(legend_list,bbox_to_anchor=(1.04,0.5), loc="center left")
+    plt.xlabel('Absolute Stretch in meters')
+    plt.ylabel('Forces in N / Activation')
+    plt.savefig('2_b_2.png')
     plt.show()
 
     #Question 2c
