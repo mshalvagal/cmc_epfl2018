@@ -243,28 +243,18 @@ def exercise2a():
         
     #Question 2a
     activation = 0.5
-    stretch=np.arange(0.0, 0.06, 0.001)      
+    stretch=np.arange(-0.1, 0.06, 0.005)      
     active_force, passive_force, CE_length = isometric_contraction(muscle,stretch,activation)
     
-    #plt.figure()
-    #plt.plot(stretch,active_force,stretch,passive_force)
-    #plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force'])
-    #plt.xlabel('stretch')
-    #plt.ylabel('Forces in N')
-    #plt.show()
-    
-    #plt.figure()
-    #plt.plot(stretch,CE_length)
-    #plt.xlabel('Stretch')
-    #plt.ylabel('Length of contractile element')
-    #plt.show()
-    
     plt.figure()
-    plt.plot(stretch,active_force,stretch,passive_force)
-    plt.plot(stretch,map(add,active_force,passive_force))
-    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force'],
-                bbox_to_anchor=(1.04,0.5), loc="center left")
-    plt.xlabel('Absolute Stretch in meters')
+    plt.plot(CE_length,active_force,CE_length,passive_force)
+    plt.plot(CE_length,map(add,active_force,passive_force))
+    plt.axvline(x=muscle.l_opt, ymin=0, ymax = 0.5, color='k',linestyle='dashed')
+    plt.axvline(x=muscle.l_opt*(1.0-muscle.w), ymin=0, ymax = 0.5, color='r',linestyle='dashed')
+    #plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force'],
+                #bbox_to_anchor=(1.04,0.5), loc="center left")
+    plt.legend(['Active Force, activation = {}'.format(activation),'Passive Force','Total Force','l_opt value','limit for muscle collapse'],bbox_to_anchor=(1.04,0.5), loc="center left")
+    plt.xlabel('Length of the contractile element in meters')
     plt.ylabel('Forces in N')
     plt.savefig('2_a.png')
     plt.show()
@@ -277,12 +267,16 @@ def exercise2a():
         if (activation<0.01):
             activation=0
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,activation)
-        plt.plot(stretch,active_force)
+        plt.plot(CE_length,active_force)
         legend_list.append('Active Force, activation = {0:.2g}'.format(activation))
-    plt.plot(stretch,passive_force)
+    plt.plot(CE_length,passive_force)
     legend_list.append('Passive Force')
+    plt.axvline(x=muscle.l_opt, ymin=0, ymax = 1, color='k',linestyle='dashed')
+    legend_list.append('l_opt value')
+    plt.axvline(x=muscle.l_opt*(1.0-muscle.w), ymin=0, ymax = 0.5, color='r',linestyle='dashed')
+    legend_list.append('limit for muscle collapse')
     plt.legend(legend_list,bbox_to_anchor=(1.04,0.5), loc="center left")
-    plt.xlabel('Absolute Stretch in meters')
+    plt.xlabel('Length of the contractile element in meters')
     plt.ylabel('Forces in N')
     plt.savefig('2_b.png')
     plt.show()
@@ -292,18 +286,22 @@ def exercise2a():
     legend_list =[]
     for i, activation in enumerate(activation_range):
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,activation)
-        plt.plot(stretch,active_force/activation)
+        plt.plot(CE_length,active_force/activation)
         legend_list.append('Active Force / Activation, activation = {0:.2g}'.format(activation))
+    plt.axvline(x=muscle.l_opt, ymin=0, ymax = 1, color='k',linestyle='dashed')
+    legend_list.append('l_opt value')
+    plt.axvline(x=muscle.l_opt*(1.0-muscle.w), ymin=0, ymax = 0.5, color='r',linestyle='dashed')
+    legend_list.append('limit for muscle collapse')
     plt.legend(legend_list,bbox_to_anchor=(1.04,0.5), loc="center left")
-    plt.xlabel('Absolute Stretch in meters')
+    plt.xlabel('Length of the contractile element in meters')
     plt.ylabel('Forces in N / Activation')
     plt.savefig('2_b_2.png')
-    plt.show()
+    #plt.show()
 
     #Question 2c
-    #we plot it with relative stretch and not absolute stretch.
-    l_opt_range=np.array([0.01,0.1,0.5]) #0.11 is the default fiber length
-    relative_stretch=np.arange(0,1,0.02)
+    #Relative stretch stimulation
+    l_opt_range=np.array([0.06,0.11,0.16]) #0.11 is the default fiber length
+    relative_stretch=np.arange(-0.5,0.75,0.02)
     #relative_stretch relatively to l_opt
     legend_list_2c =[]
     plt.figure()
@@ -311,14 +309,38 @@ def exercise2a():
         muscle.l_opt = l_opt
         stretch=l_opt*relative_stretch
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
-        plt.plot(relative_stretch*100,active_force,relative_stretch*100,passive_force)
+        plt.plot(CE_length,active_force,CE_length,passive_force)
         legend_list_2c.append(r'Active Force, l_opt = {} cm'.format(l_opt*100))
         legend_list_2c.append(r'Passive Force, l_opt = {} cm'.format(l_opt*100))
-    plt.legend(legend_list_2c,bbox_to_anchor=(1.04,0.5),loc="center left")
-    plt.xlabel('Relative Stretch in %')
+    #plt.axvline(x=100, ymin=0, ymax = 1,linestyle='dashed')
+    #legend_list.append('l_opt value')
+    plt.legend(legend_list_2c,bbox_to_anchor=(1.04,0.5), loc="center left")
+    plt.xlabel('Length of the contractile element in meters')
     plt.ylabel('Forces in N')
-    plt.ylim([0,1250])
+    plt.ylim([0,1000])
     plt.savefig('2_c.png')
+    plt.show()  
+    
+    #Absolute stretch stimulation
+    l_opt_range=np.array([0.06,0.16]) #0.11 is the default fiber length
+    stretch=np.arange(-0.03, 0.06, 0.005)
+    legend_list_2c_2 =[]
+    plt.figure()
+    for i, l_opt in enumerate(l_opt_range):
+        muscle.l_opt = l_opt
+        active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
+        plt.plot(stretch,active_force,stretch,passive_force)
+        plt.plot(stretch,map(add,active_force,passive_force))
+        legend_list_2c_2.append(r'Active Force, l_opt = {} cm'.format(l_opt*100))
+        legend_list_2c_2.append(r'Passive Force, l_opt = {} cm'.format(l_opt*100))
+        legend_list_2c_2.append(r'Total Force, l_opt = {} cm'.format(l_opt*100))
+    #plt.axvline(x=100, ymin=0, ymax = 1,linestyle='dashed')
+    #legend_list.append('l_opt value')
+    plt.legend(legend_list_2c_2,bbox_to_anchor=(1.04,0.5), loc="center left")
+    plt.xlabel('Absolute input stretch in meters')
+    plt.ylabel('Forces in N')
+    plt.ylim([0,1000])
+    plt.savefig('2_c_2.png')
     plt.show()  
 
 def exercise2b():
