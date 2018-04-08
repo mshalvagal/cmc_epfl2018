@@ -330,7 +330,7 @@ def exercise2a():
         muscle.l_opt = l_opt
         active_force,passive_force,CE_length = isometric_contraction(muscle,stretch,0.5)
         plt.plot(stretch,active_force,stretch,passive_force)
-        plt.plot(stretch,map(add,active_force,passive_force))
+        plt.plot(stretch,map(add,active_force,passive_force), linestyle='dashed')
         legend_list_2c_2.append(r'Active Force, l_opt = {} cm'.format(l_opt*100))
         legend_list_2c_2.append(r'Passive Force, l_opt = {} cm'.format(l_opt*100))
         legend_list_2c_2.append(r'Total Force, l_opt = {} cm'.format(l_opt*100))
