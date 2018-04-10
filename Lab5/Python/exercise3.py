@@ -39,6 +39,7 @@ def exercise3():
         None
     """
 
+    plt.close('all')
     # Define and Setup your pendulum model here
     # Check Pendulum.py for more details on Pendulum class
     P_params = PendulumParameters()  # Instantiate pendulum parameters
@@ -67,10 +68,10 @@ def exercise3():
 
     # Define Muscle Attachment points
     m1_origin = np.array([-0.17, 0.0])  # Origin of Muscle 1
-    m1_insertion = np.array([0.0, -0.17])  # Insertion of Muscle 1
+    m1_insertion = np.array([0.0, -0.2])  # Insertion of Muscle 1
 
     m2_origin = np.array([0.17, 0.0])  # Origin of Muscle 2
-    m2_insertion = np.array([0.0, -0.17])  # Insertion of Muscle 2
+    m2_insertion = np.array([0.0, -0.2])  # Insertion of Muscle 2
 
     # Attach the muscles
     muscles.attach(np.array([m1_origin, m1_insertion]),
@@ -87,7 +88,7 @@ def exercise3():
     time = np.arange(0., t_max, 0.001)  # Time vector
 
     ##### Model Initial Conditions #####
-    x0_P = np.array([0.0, 0.])  # Pendulum initial condition
+    x0_P = np.array([np.pi/4, -0.1])  # Pendulum initial condition
 
     # Muscle Model initial condition
     x0_M = np.array([0., M1.l_CE, 0., M2.l_CE])
@@ -153,6 +154,20 @@ def exercise3():
     simulation = SystemAnimation(res, pendulum, muscles)
     # To start the animation
     simulation.animate()
+    
+    #Question 3a
+    m1_length = np.sqrt(m1_origin[0]**2 + m1_insertion[1]**2 +
+            2 * np.abs(m1_origin[0]) * np.abs(m1_insertion[1]) * np.sin(res[:,1]))
+    
+    plt.figure('m1')
+    plt.title('m1 Length')
+    plt.plot(res[:, 1], m1_length)
+    plt.xlabel('Position [rad]')
+    plt.ylabel('M1 length [m]')
+    plt.grid()
+    
+#            self.moment1 = self.a1_m1 * self.a2_m1 * \
+#            np.cos(angle) / self.muscle1_length
 
 
 if __name__ == '__main__':

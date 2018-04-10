@@ -106,7 +106,7 @@ def pendulum_equation(theta, dtheta, torque, parameters):
         parameters.mass,
         parameters.I
     )
-    return 0
+    return -mass*g*L*sin(theta)/I + torque/I
 
 
 def pendulum_system(theta, dtheta, torque, parameters):
