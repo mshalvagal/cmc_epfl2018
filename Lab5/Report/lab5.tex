@@ -1,0 +1,307 @@
+
+\documentclass{cmc}
+
+\begin{document}
+
+\pagestyle{fancy}
+\lhead{\textit{\textbf{Computational Motor Control, Spring 2018} \\
+    Python exercise, Lab 5, GRADED}} \rhead{Student \\ Names}
+
+\section*{Student names: \ldots (please update)}
+
+\textit{Instructions: Update this file (or recreate a similar one,
+  e.g.\ in Word) to prepare your answers to the questions. Feel free
+  to add text, equations and figures as needed. Hand-written notes,
+  e.g.\ for the development of equations, can also be included e.g.\
+  as pictures (from your cell phone or from a scanner).
+  \textbf{\corr{This lab is graded.}} and need to be submitted before
+  the \textbf{\corr{Deadline : 23-04-2018 Midnight}}.  \\ Please
+  submit both the source file (*.doc/*.tex) and a pdf of your
+  document, as well as all the used and updated Python functions in a
+  single zipped file called \corr{lab5\_name1\_name2\_name3.zip} where
+  name\# are the team member’s last names.  \corr{Please submit only
+    one report per team!}}
+\\
+
+In the previous week you explored the behavior of a simple pendulum
+model with passive elements such as springs and dampers and then
+explored the properties of a single but more realstic muscle model
+with both active and passive components.
+
+The main goal of this exercise is to explore the behavior of the
+pendulum model attached with two antagonist Hill-type muscles and then
+connect a half-center neural network model to drive the muscles in the
+pendulum. The system is as shown in figure \ref{fig:p_muscles}.
+
+\subsection*{Files to complete the exercises}
+\label{sec:intro}
+
+\begin{itemize}
+\item \fileref{lab5.py} : Main file
+\item \fileref{exercise3.py} : Main file to complete exercise 3
+\item \fileref{exercise4.py} : Main file to complete exercise 4
+\item \fileref{SystemParameters.py} : Parameter class for Pendulum,
+  Muscles and Neural Network (Create an instance and change properties
+  using the instance. You do not have to modify the file)
+\item \fileref{Muscle.py} : Muscle class (You do not have to modify
+  the file)
+\item \fileref{System.py} : System class to combine different models
+  like Pendulum, Muscles, Neural Network (You do not have to modify
+  the file)
+\item \fileref{PendulumSystem.py} : Contains the description of
+  pendulum equation and Pendulum class. You can use the file to define
+  perturbations in the pendulum.
+\item \fileref{MuscleSystem.py} : Class to combine two muscles (You do
+  not have to modify the file)
+\item \fileref{NeuralSystem.py} : Class to describe the neural network
+  (You do not have to modify the file)
+\item \fileref{SystemSimulation.py} : Class to initialize all the
+  systems, validate and to perform integration (You do not have to
+  modify the file)
+\item \fileref{SystemAnimation.py} : Class to produce animation of the
+  systems after integration (You do not have to modify the file)
+\end{itemize}
+
+\textbf{NOTE : } '\textit{You do not have to modify}' does not mean
+you should not, it means it is not necessary to complete the
+exercises. But, \corr{you are expected to look into each of these
+  files and understand how everything works}. You are free to explore
+and change any file if you feel so.
+
+\section*{Exercise 3 : Pendulum model with Muscles}
+\label{sec:question-1}
+
+\begin{figure}[H]
+  \centering \includegraphics[scale=1.0]{figures/pendulum_muscles.pdf}
+  \caption{Pendulum with Antagonist Hill Muscles}
+  \label{fig:p_muscles}
+\end{figure}
+
+The system is comprised of a physical pendulum described by equation
+\ref{eq:pendulum} and a pair of antagonist muscles \textbf{M1} and
+\textbf{M2}. Muscle \textbf{M1} extends the pendulum ($\theta$
+increases) and Muscle \textbf{M2} flexes the muscle ($\theta$
+decreases).
+
+Consider the system only for the pendulum range $\theta$ =
+$[-\pi/2, \pi/2]$
+
+\begin{equation}
+  \label{eq:pendulum}
+  I\ddot{\theta} = -0.5 \cdot m \cdot g \cdot L \cdot sin(\theta)
+\end{equation}
+
+Where,
+
+\begin{itemize}
+\item $I$ - Pendulum inertia about the pendulum pivot joint
+  [$kg \cdot m^2$]
+\item $\theta$ - Pendulum angular position with the vertical [$rad$]
+\item $\ddot{\theta}$ - Pendulum angular acceleration
+  [$rad \cdot s^{-2}$]
+\item $m$ - Pendulum mass [$kg$]
+\item $g$ - System gravity [$m \cdot s^{-2}$]
+\item $L$ - Length of the pendulum [$m$]
+\end{itemize}
+
+Each muscle is modelled using the Hill-type equations that you are now
+familiar with.  Muscles have two attachment points, one at the origin
+and the other at the insertion point.  The origin points are denoted
+by $O_{1,2}$ and the insertion points by $I_{1,2}$. The two points of
+attachment dictate how the length of the muscle changes with respect
+to the change in position of the pendulum.
+
+The active and passive forces produced by the muscle are transmitted
+to the pendulum via the tendons. In order to apply this force on to
+the pendulum, we need to compute the moment based on the attachments
+of the muscle.
+
+Using the laws of sines and cosines, we can derive the length of
+muscle and moment arm as below. The reference to the paper can be found here
+\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5323435}{\corr{Reference}},
+
+\begin{eqnarray}
+  \label{eq:2}
+  L_1 = \sqrt[2]{a_{1}^2 + a_{2}^2 + 2 \cdot a_1 \cdot a_2 \cdot \sin(\theta)} \\
+  h_1 = \frac{a_1 \cdot a_2 \cdot \cos(\theta)}{L_1}
+\end{eqnarray}
+
+Where,
+
+\begin{itemize}
+\item $L_1$ : Length of muscle 1
+\item $a_1$ : Distance between muscle 1 origin and pendulum origin
+  ($|O_1C|$)
+\item $a_2$ : Distance between muscle 1 insertion and pendulum origin
+  ($|I_1C|$)
+\item $h_1$ : Moment arm of the muscle
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=1]{figures/pendulum_muscles_force_length.pdf}
+  \caption[force_length]{Computation of muscle length and moment arm}
+  \label{fig:pendulum_muscles_force_length}
+\end{figure}
+
+Equation \ref{eq:2} can be extended to the Muscle 2 in similar
+way. Thus, the final torque applied by the muscle on to the pendulum
+is given by,
+
+\begin{equation}
+  \label{eq:3}
+  \tau = F \cdot h
+\end{equation}
+
+Where,
+
+\begin{itemize}
+\item $\tau$ : Torque [$N \cdot m$]
+\item $F$ : Muscle Tendon Force [$N$]
+\item $h$ : Muscle Moment Arm [$m$]
+
+\end{itemize}
+
+In this exercise, the following states of the system are integrated
+over time,
+
+\begin{equation}
+  \label{eq:1}
+  X = \begin{bmatrix}
+    \theta & \dot{\theta} & A_1 & l_{CE1} & A_2 & l_{CE2}
+  \end{bmatrix}
+\end{equation}
+
+Where,
+
+\begin{itemize}
+\item $\theta$ : Angular position of the pendulum [rad]
+\item $\dot{\theta}$ : Angular velocity of the pendulum [rad/s]
+\item $A_1$ : Activation of muscle 1 with a range between [0, 1].  0
+  corresponds to no stimulation and 1 corresponds to maximal
+  stimulation.
+\item $l_{CE1}$ : Length of contracticle element of muscle 1
+\item $A_2$ : Activation of muscle 2 with a range between [0, 1].  0
+  corresponds to no stimulation and 1 corresponds to maximal
+  stimulation.
+\item $l_{CE2}$ : Length of contracticle element of muscle 2
+\end{itemize}
+
+To complete this exercise you will make use of the following files,
+\fileref{exercise3.py}, \fileref{SystemParameters.py},
+\fileref{Muscle.py}, \fileref{System.py}, \fileref{PendulumSystem.py},
+\fileref{MuscleSystem.py}, \fileref{SystemSimulation.py}
+
+\label{sec:questions}
+
+\subsection*{3a. For a given set of attachment points, compute and
+  plot the muscle length and moment arm as a function of $\theta$
+  between $[-\pi/2, \pi/2]$ using equations in \corr{eqn:\ref{eq:2}}
+  and discuss how it influences the pendulum resting position and the
+  torques muscles can apply at different joint angles.}
+\label{sec:3a}
+
+
+\subsection*{3b. Under passive conditions (muscle is not activated),
+  Discuss the effect of muscle attachment points on the pendulum's
+  behavior. You can use the results from previous question to support
+  and explain the pendulum's behavior.}
+\label{sec:3b}
+
+
+\subsection*{3c. Using simple activation wave forms (example : sine or
+  square waves) applied to muscles (use
+  \fileref{SystemSimulation.py::add\_muscle\_activations} method in
+  \fileref{exercise3.py}), try to obtain a limit cycle behavior for
+  the pendulum. Use relevant plots to prove the limit cycle behavior.
+  Explain and show the activations wave forms you used. If needed, use
+  \fileref{PendulumSystem.py::Pendulum::derivative} function to
+  perturb the model.}
+\label{sec:3c}
+
+\subsection*{3d. Based on the previous limit cycle, show how the
+  physical properties of the pendulum such as mass, length and inertia
+  (Inertia is a result of mass and length) affect the amplitude and
+  frequency of the pendulum oscillations for a given stimulation.}
+\label{sec:3d}
+
+\subsection*{3e. Discuss the relationship between stimulation
+  frequency and amplitude with the resulting pendulum's behavior.}
+\label{sec:3e}
+
+\subsection*{3f. Show how the pendulum's behavior is affected by the
+  maximal muscle force $F_{max}$ for a given stimulation.}
+\label{sec:3f}
+
+\newpage
+\section*{Exercise 4 : Neural network driven pendulum model with
+  muscles}
+\label{sec:neur-netw-driv}
+
+In this exercise, the goal is to drive the above system
+\ref{fig:p_muscles} with a symmetric four-neuron oscillator
+network. The network is based on Brown's half-center model with
+fatigue mechanism. Here we use the leaky-integrate and fire neurons
+for modelling the network. Figure \ref{fig:p_muscles_neurons} shows
+the network structure and the complete system.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=1.5]{figures/pendulum_muscles_neurons.pdf}
+  \caption{Pendulum with Antagonist Hill Muscles Driven Half Center
+    Neural Network.}
+  \label{fig:p_muscles_neurons}
+\end{figure}
+
+Since each leaky-integrate and fire neuron comprises of one first
+order differential equation, the states to be integrated now increases
+by four(one state per neuron). The states are,
+
+
+\begin{equation}
+  \label{eq:1}
+  X = \begin{bmatrix}
+    \theta & \dot{\theta} & A_1 & l_{CE1} & A_2 & l_{CE2} & m_1 & m_2 & m_3 & m_4
+  \end{bmatrix}
+\end{equation}
+
+Where,
+
+\begin{itemize}
+\item $m_1$ : Membrane potential of neuron 1
+\item $m_2$ : Membrane potential of neuron 2
+\item $m_3$ : Membrane potential of neuron 3
+\item $m_4$ : Membrane potential of neuron 4
+\end{itemize}
+
+To complete this exercise, additionally you will have to use
+\fileref{NeuralSystem.py} and \fileref{exercise4.py}
+
+\subsection*{4a. Find a set of weights for the neural network that
+  produces oscillations to drive the pendulum into a limit cycle
+  behavior.}
+\label{sec:4a}
+
+\subsection*{4b. Show how the network weights ,bias and time constant
+  parameters affect the behavior of the pendulum.}
+\label{sec:4b}
+
+\subsection*{4c.As seen in the course, apply an external drive to the
+  individual neurons and explain how the system is affected. Show
+  plots for low [0] and high [1] external drives. To add external
+  drive to the network you can use the method \\
+  \fileref{SystemSimulation.py::add\_external\_inputs\_to\_network} }
+\label{sec:4c}
+
+\subsection*{4d. [Open Question] What are the limitations of the half center model in
+  producing alternating patterns to control the pendulum? What would
+  be the effect of sensory feedback on this model?}
+\label{sec:4d}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
