@@ -101,7 +101,7 @@ def exercise4a():
     sys.add_neural_system(neural_network)
 
     ##### Time #####
-    t_max = 3.  # Maximum simulation time
+    t_max = 5.  # Maximum simulation time
     time = np.arange(0., t_max, 0.001)  # Time vector
 
     ##### Model Initial Conditions #####
@@ -123,11 +123,11 @@ def exercise4a():
     sim = SystemSimulation(sys)  # Instantiate Simulation object
 
     # Add external inputs to neural network
-    ext_in=np.zeros((len(time), 4))
-    ext_in[int(len(time)/2),:]=-50
-    ext_in[int(3*len(time)/4),:]=50
+    #ext_in=np.zeros((len(time), 4))
+    #ext_in[int(len(time)/2),:]=-50
+    #ext_in[int(3*len(time)/4),:]=50
     # sim.add_external_inputs_to_network(np.ones((len(time), 4)))
-    sim.add_external_inputs_to_network(ext_in)
+    # sim.add_external_inputs_to_network(ext_in)
 
     sim.initalize_system(x0, time)  # Initialize the system state
 
@@ -152,7 +152,7 @@ def exercise4a():
     plt.grid()
 
     plt.figure('Neurons_MP')
-    plt.subplot(2,1,1)
+    #plt.subplot(2,1,1)
     plt.title('Neurons  Membrane Potential')    
     leg=[]
     for i in range(1,5):
@@ -162,14 +162,14 @@ def exercise4a():
     plt.xlabel('Time [s]')
     plt.legend(leg)
     plt.grid()
-    
+    """
     plt.subplot(2,1,2)
     plt.title('Perturbation')    
     plt.plot(res[:, 0], ext_in[:,1])
     plt.ylabel('voltage input [mV]')
     plt.xlabel('Time [s]')
     plt.grid()
-
+    """
     if DEFAULT["save_figures"] is False:
         plt.show()
     else:
