@@ -181,4 +181,3 @@ def exercise3b():
     
 if __name__ == '__main__':
     exercise3b()
-
