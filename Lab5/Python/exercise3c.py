@@ -1,9 +1,10 @@
-""" Lab 5 Exercise 3
-
-This file implements the pendulum system with two muscles attached
-
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 """
+Created on Tue Apr 17 15:54:16 2018
 
+@author: matthieu
+"""
 from SystemParameters import PendulumParameters, MuscleParameters
 from Muscle import Muscle
 import numpy as np
@@ -16,21 +17,23 @@ from MuscleSystem import MuscleSytem
 from SystemSimulation import SystemSimulation
 from SystemAnimation import SystemAnimation
 from System import System
-from exercise3c import exercise3c
-
 
 # Global settings for plotting
-# You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
 plt.rc('font', size=12.0)
 plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
-plt.rc('axes', labelsize=14.0)     # fontsize of the x and y labels
-plt.rcfrom exercise3c import exercise3c('xtick', labelsize=14.0)    # fontsize of the tick labels
+plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rcParams.update({'figure.autolayout': True}) # to get better graphs at save
+plt.rcParams.update({'savefig.dpi': 500}) #set resolution for saving figures
+plt.rcParams.update({'savefig.bbox': 'tight'}) #to include legends saving figures
 
 
-def exercise3():
-    """ Main function to run for Exercise 3.
+
+#def exercise3c():
+if __name__ == '__main__':
+    """ Main function for question 3c
 
     Parameters
     ----------
@@ -40,14 +43,16 @@ def exercise3():
     -------
         None
     """
-
-    plt.close('all')
     # Define and Setup your pendulum model here
     # Check Pendulum.py for more details on Pendulum class
     P_params = PendulumParameters()  # Instantiate pendulum parameters
     P_params.L = 0.5  # To change the default length of the pendulum
     P_params.mass = 1.  # To change the default mass of the pendulum
     pendulum = Pendulum(P_params)  # Instantiate Pendulum object
+    
+    #This pendulum will receive perturbations to prove limit cycle
+    pendulum.perturb = True
+
 
     #### CHECK OUT Pendulum.py to ADD PERTURBATIONS TO THE MODEL #####
 
@@ -86,11 +91,12 @@ def exercise3():
     sys.add_muscle_system(muscles)  # Add the muscle model to the system
 
     ##### Time #####
-    t_max = 1.  # Maximum simulation time
-    time = np.arange(0., t_max, 0.001)  # Time vector
+    t_max = 4  # Maximum simulation time
+    time_step = 0.001
+    time = np.arange(0., t_max, time_step)  # Time vector
 
     ##### Model Initial Conditions #####
-    x0_P = np.array([np.pi/4, -0.1])  # Pendulum initial condition
+    x0_P = np.array([0, 0])  # Pendulum initial condition
 
     # Muscle Model initial condition
     x0_M = np.array([0., M1.l_CE, 0., M2.l_CE])
@@ -107,9 +113,23 @@ def exercise3():
     # Add muscle activations to the simulation
     # Here you can define your muscle activation vectors
     # that are time dependent
-
-    act1 = np.ones((len(time), 1)) * 0.05
-    act2 = np.ones((len(time), 1)) * 0.05
+    
+    sin_frequency = 2 #in Hz
+    amp_stim = 1
+    phase_shift = np.pi
+    act1 = np.zeros((len(time),1))
+    act2 = np.zeros((len(time),1))
+    for i in range(0,len(time)):
+        act1[i,0] = amp_stim*(1+np.sin(2*np.pi*sin_frequency*time[i]))/2
+        act2[i,0] = amp_stim*(1+ np.sin(2*np.pi*sin_frequency*time[i] + phase_shift))/2
+    
+    plt.figure()
+    plt.plot(time,act1)
+    plt.plot(time,act2)
+    plt.legend(["Activation for muscle 1", "Activation for muscle 2"])
+    plt.xlabel("Time in s")
+    plt.ylabel("Activation")
+    plt.show()
 
     activations = np.hstack((act1, act2))
 
@@ -127,52 +147,24 @@ def exercise3():
     # Obtain the states of the system after integration
     # res is np.array [time, states]
     # states vector is in the same order as x0
-    res = sim.results()
-
-    # In order to obtain internal paramters of the muscle
-    # Check SystemSimulation.py results_muscles() method for more information
-    res_muscles = sim.results_muscles()
+    res_1 = sim.results()
 
     # Plotting the results
     plt.figure('Pendulum')
     plt.title('Pendulum Phase')
-    plt.plot(res[:, 1], res[:, 2])
+    plt.plot(res_1[:, 1], res_1[:, 2])
     plt.xlabel('Position [rad]')
     plt.ylabel('Velocity [rad.s]')
     plt.grid()
-
-    if DEFAULT["save_figures"] is False:
-        plt.show()
-    else:
-        figures = plt.get_figlabels()
-        biolog.debug("Saving figures:\n{}".format(figures))
-        for fig in figures:
-            plt.figure(fig)
-            save_figure(fig)
-            plt.close(fig)
-
-    # To animate the model, use the SystemAnimation class
-    # Pass the res(states) and systems you wish to animate
-    simulation = SystemAnimation(res, pendulum, muscles)
-    # To start the animation
-    #simulation.animate()
+    plt.savefig('3_c.png')
+    plt.show()
     
-    #Question 3a
-    #sm1_length = np.sqrt(m1_origin[0]**2 + m1_insertion[1]**2 +
-           # 2 * np.abs(m1_origin[0]) * np.abs(m1_insertion[1]) * np.sin(res[:,1]))
+    # Plotting the results
+    plt.figure()
+    plt.title('Pendulum Oscillations')
+    plt.plot(time,res_1[:, 1])
+    plt.xlabel('Time in s')
+    plt.ylabel('Angle in radians')
+    plt.grid()
+    plt.show()
     
-    #plt.figure('m1')
-    #plt.title('m1 Length')
-    #plt.plot(res[:, 1], m1_length)
-    #plt.xlabel('Position [rad]')
-    #plt.ylabel('M1 length [m]')
-    #plt.grid()
-    
-#            self.moment1 = self.a1_m1 * self.a2_m1 * \
-#            np.cos(angle) / self.muscle1_length
-    
-
-
-if __name__ == '__main__':
-    exercise3()
-

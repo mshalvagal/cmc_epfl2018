@@ -13,6 +13,7 @@ class Pendulum(object):
         self.origin = np.array([0.0, 0.0])
         self.theta = 0.0
         self.dtheta = 0.0
+        self.perturb = False
         self.parameters = parameters
         return
 
@@ -36,7 +37,16 @@ class Pendulum(object):
             Return the current Acceleration and Velocity of the pendulum"""
 
         # YOU CAN ADD PERTURBATIONS TO THE PENDULUM MODEL HERE
-
+        perturb_value = np.array([1, 0])
+        if (self.perturb):
+            if (time==1):
+                print("Warning, pendulum perturbed, +, {}".format(time))
+                state = state + perturb_value
+            if (time==2):
+                print("Warning, pendulum perturbed, -, {}".format(time))
+                state = state + perturb_value
+        
+                
         # External torque applied to the pendulum
         torque = args[0]
         return pendulum_system(
