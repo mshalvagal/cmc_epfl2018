@@ -120,7 +120,7 @@ def exercise3e():
     frequency_pend=np.zeros(len(muscle_forces))
     amplitude_pend=np.zeros(len(muscle_forces))
     
-   for i,force in enumerate(muscle_forces):
+    for i,force in enumerate(muscle_forces):
        sys.muscle_sys.Muscle1.F_max = force
        sys.muscle_sys.Muscle2.F_max = force
        
@@ -134,38 +134,38 @@ def exercise3e():
        amplitude_pend[i] = find_amplitude(angular_position, int(len(angular_position)/2))
        
    
-   plt.figure()
-   plt.subplot(121)
-   plt.loglog(muscle_forces,frequency_pend)
-   plt.grid()
-   plt.ylabel('Pendulum Oscillation Frequency [Hz]')
-   plt.xlabel('Maximal Muscle Force [N]')
-   plt.subplot(122)
-   plt.loglog(muscle_forces,amplitude_pend)
-   plt.grid()
-   plt.ylabel('Pendulum Oscillation Amplitude [rad]')
-   plt.xlabel('Maximal Muscle Force [N]')
-   plt.savefig('3_f.png')
-   plt.show()
+    plt.figure()
+    plt.subplot(121)
+    plt.loglog(muscle_forces,frequency_pend)
+    plt.grid()
+    plt.ylabel('Pendulum Oscillation Frequency [Hz]')
+    plt.xlabel('Maximal Muscle Force [N]')
+    plt.subplot(122)
+    plt.loglog(muscle_forces,amplitude_pend)
+    plt.grid()
+    plt.ylabel('Pendulum Oscillation Amplitude [rad]')
+    plt.xlabel('Maximal Muscle Force [N]')
+    plt.savefig('3_f.png')
+    plt.show()
    
-   muscle_forces = [1,5,10,100,1500]
+    muscle_forces = [1,5,10,100,1500]
    
-   frequency_pend=np.zeros(len(muscle_forces))
-   amplitude_pend=np.zeros(len(muscle_forces))
+    frequency_pend=np.zeros(len(muscle_forces))
+    amplitude_pend=np.zeros(len(muscle_forces))
    
-   plt.figure('Theta')
-   plt.title('Pendulum angle')
-   plt.ylabel('Position [rad]')
-   plt.xlabel('Time [s]')
+    plt.figure('Theta')
+    plt.title('Pendulum angle')
+    plt.ylabel('Position [rad]')
+    plt.xlabel('Time [s]')
    
-   plt.figure('Pendulum 3e')
-   plt.title('Pendulum Phase')
-   plt.xlabel('Position [rad]')
-   plt.ylabel('Velocity [rad/s]')
+    plt.figure('Pendulum 3e')
+    plt.title('Pendulum Phase')
+    plt.xlabel('Position [rad]')
+    plt.ylabel('Velocity [rad/s]')
    
-   labels = []
+    labels = []
    
-   for i,force in enumerate(muscle_forces):
+    for i,force in enumerate(muscle_forces):
        sys.muscle_sys.Muscle1.F_max = force
        sys.muscle_sys.Muscle2.F_max = force
        
@@ -189,13 +189,13 @@ def exercise3e():
        labels.append(r'$F_{max}=$ ' + str(force))
    
    
-   plt.figure('Pendulum 3e')
-   plt.legend(labels)
-   plt.savefig('3_f2.png')
+    plt.figure('Pendulum 3e')
+    plt.legend(labels)
+    plt.savefig('3_f2.png')
    
-   plt.figure('Theta')
-   plt.legend(labels)
-   plt.savefig('3_f3.png')
+    plt.figure('Theta')
+    plt.legend(labels)
+    plt.savefig('3_f3.png')
     
 #    Asymmetric Muscles
     
