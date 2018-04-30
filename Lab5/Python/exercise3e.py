@@ -62,10 +62,10 @@ def show_fft(signal,time_step):
 
 def find_frequency(signal,time_step,index_start):
     signal_stat = signal[index_start:len(signal)]
-    index_zeros = np.where(signal_stat==0)[0]
+    index_zeros = np.where(np.diff(np.sign(signal_stat)))[0] #np.where(signal_stat==0)[0]
     deltas = np.diff(index_zeros)
     delta = np.mean(deltas)
-    period = delta*time_step
+    period = 2*delta*time_step
     return 1/period
 
 def find_amplitude(signal,index_start):
@@ -76,7 +76,7 @@ def find_amplitude(signal,index_start):
 def frequency_effect(sim):
     #Effect of frequencies
     stim_frequency_range = np.array([0.05,0.1,0.5,1,5,10,50,100,500]) #in Hz
-    #stim_frequency_range = np.array([1]) #in Hz
+#    stim_frequency_range = np.array([1]) #in Hz
     stim_amp = 1 # belongs to 0-1
     phase_shift = np.pi
     frequency_pend=np.zeros(len(stim_frequency_range))
@@ -90,9 +90,8 @@ def frequency_effect(sim):
 
         act1 = np.zeros((len(time),1))
         act2 = np.zeros((len(time),1))
-        for i in range(0,len(time)):
-            act1[i,0] = stim_amp*(1 + np.sin(2*np.pi*stim_frequency*time[i]))/2
-            act2[i,0] = stim_amp*(1+ np.sin(2*np.pi*stim_frequency*time[i] + phase_shift))/2
+        act1[:,0] = stim_amp*(1 + np.sin(2*np.pi*stim_frequency*time))/2
+        act2[:,0] = stim_amp*(1+ np.sin(2*np.pi*stim_frequency*time + phase_shift))/2
         activations = np.hstack((act1, act2))
         sim.add_muscle_activations(activations)
         sim.initalize_system(x0, time)  # Initialize the system state
@@ -100,24 +99,26 @@ def frequency_effect(sim):
         res = sim.results()  
         #computing the freuquency and amplitude
         angular_position = res[:,1]
-        frequency_pend[j] = find_freq_fft(angular_position,time_step)
-        amplitude_pend[j] = find_amplitude(angular_position, len(angular_position)/2)
+        frequency_pend[j] = find_frequency(angular_position,time_step, int(len(angular_position)/2))
+        amplitude_pend[j] = find_amplitude(angular_position, int(len(angular_position)/2))
     
     plt.figure()
     plt.subplot(121)
     plt.loglog(stim_frequency_range,frequency_pend)
+    plt.grid()
     plt.xlabel('Stimulation Frequency in Hz')
-    plt.ylabel('Resulting Pendulum Oscillation Frequency in Hz')
+    plt.ylabel('Pendulum Oscillation Frequency [Hz]')
     plt.subplot(122)
     plt.loglog(stim_frequency_range,amplitude_pend)
+    plt.grid()
     plt.xlabel('Stimulation Frequency in Hz')
-    plt.ylabel('Resulting Pendulum Oscillation Amplitude in rad')
+    plt.ylabel('Pendulum Oscillation Amplitude [rad]')
     plt.savefig('3_e1.png')
     plt.show()
-    
-    
+
+
 def amplitude_effect(sim):
-    stim_frequency = 1 #in Hz
+    stim_frequency = 10 #in Hz
     stim_amp_range = np.arange(0,1.1,0.1)# belongs to 0-1
     phase_shift = np.pi
     frequency_pend=np.zeros(len(stim_amp_range))
@@ -131,9 +132,8 @@ def amplitude_effect(sim):
 
         act1 = np.zeros((len(time),1))
         act2 = np.zeros((len(time),1))
-        for i in range(0,len(time)):
-            act1[i,0] = stim_amp*(1 + np.sin(2*np.pi*stim_frequency*time[i]))/2
-            act2[i,0] = stim_amp*(1+ np.sin(2*np.pi*stim_frequency*time[i] + phase_shift))/2
+        act1[:,0] = stim_amp*(1 + np.sin(2*np.pi*stim_frequency*time))/2
+        act2[:,0] = stim_amp*(1+ np.sin(2*np.pi*stim_frequency*time + phase_shift))/2
         activations = np.hstack((act1, act2))
         sim.add_muscle_activations(activations)
         sim.initalize_system(x0, time)  # Initialize the system state
@@ -141,18 +141,22 @@ def amplitude_effect(sim):
         res = sim.results()  
         #computing the freuquency and amplitude
         angular_position = res[:,1]
-        frequency_pend[j] = find_freq_fft(angular_position,time_step)
-        amplitude_pend[j] = find_amplitude(angular_position, len(angular_position)/2)
+        frequency_pend[j] = find_frequency(angular_position,time_step, int(len(angular_position)/2))
+#        frequency_pend[j] = find_freq_fft(angular_position,time_step)
+        amplitude_pend[j] = find_amplitude(angular_position, int(len(angular_position)/2))
     
+    frequency_pend[0] = 0.0;
     plt.figure()
     plt.subplot(121)
     plt.plot(stim_amp_range,frequency_pend)
+    plt.grid()
     plt.xlabel('Stimulation Amplitude')
-    plt.ylabel('Resulting Pendulum Oscillation Frequency in Hz')
+    plt.ylabel('Pendulum Oscillation Frequency [Hz]')
     plt.subplot(122)
     plt.plot(stim_amp_range,amplitude_pend)
+    plt.grid()
     plt.xlabel('Stimulation Amplitude')
-    plt.ylabel('Resulting Pendulum Oscillation Amplitude in rad')
+    plt.ylabel('Pendulum Oscillation Amplitude [rad]')
     plt.savefig('3_e2.png')
     plt.show()
 

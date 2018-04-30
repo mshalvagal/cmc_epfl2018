@@ -153,12 +153,10 @@ def exercise3b():
         ax[0].plot(time, res_muscles['muscle1'][:,0])
 #        ax[1].plot(time, res_muscles['muscle1'][:,1])
         ax[1].plot(time, res_muscles['muscle1'][:,4])
-        plt.grid()
     
         ax1[0].plot(time, res_muscles['muscle2'][:,0])
 #        ax1[1].plot(time, res_muscles['muscle2'][:,1])
         ax1[1].plot(time, res_muscles['muscle2'][:,4])
-        plt.grid()
         
         labels.append(r'$a_2=$ ' + str(a))
     
@@ -169,12 +167,16 @@ def exercise3b():
     plt.figure('m1')
     ax[0].plot(time,M1.l_opt*np.ones_like(time),linestyle='-.')
     ax[0].legend(labels)
+    ax[0].grid()
     ax[1].legend(labels[0:-1])
+    ax[1].grid()
     
     plt.figure('m2')
     ax1[0].plot(time,M2.l_opt*np.ones_like(time),linestyle='-.')
     ax1[0].legend(labels)
+    ax1[0].grid()
     ax1[1].legend(labels[0:-1])
+    ax1[1].grid()
         
     plt.figure('theta')
     plt.legend(labels[0:-1])

@@ -37,14 +37,14 @@ class Pendulum(object):
             Return the current Acceleration and Velocity of the pendulum"""
 
         # YOU CAN ADD PERTURBATIONS TO THE PENDULUM MODEL HERE
-        perturb_value = np.array([1, 0])
+        perturb_value = np.array([0.05, 0])
         if (self.perturb):
-            if (time==1):
-                print("Warning, pendulum perturbed, +, {}".format(time))
-                state = state + perturb_value
-            if (time==2):
+#            if (time==1.0):
+#                print("Warning, pendulum perturbed, +, {}".format(time))
+#                state[0] = state[0] + perturb_value[0]
+            if (time==2.0):
                 print("Warning, pendulum perturbed, -, {}".format(time))
-                state = state + perturb_value
+                state[0] = state[0] + perturb_value[0]
         
                 
         # External torque applied to the pendulum

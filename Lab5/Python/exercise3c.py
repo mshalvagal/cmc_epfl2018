@@ -53,7 +53,6 @@ if __name__ == '__main__':
     #This pendulum will receive perturbations to prove limit cycle
     pendulum.perturb = True
 
-
     #### CHECK OUT Pendulum.py to ADD PERTURBATIONS TO THE MODEL #####
 
     biolog.info('Pendulum model initialized \n {}'.format(
@@ -127,7 +126,7 @@ if __name__ == '__main__':
     plt.plot(time,act1)
     plt.plot(time,act2)
     plt.legend(["Activation for muscle 1", "Activation for muscle 2"])
-    plt.xlabel("Time in s")
+    plt.xlabel("Time [s]")
     plt.ylabel("Activation")
     plt.show()
 
@@ -154,7 +153,7 @@ if __name__ == '__main__':
     plt.title('Pendulum Phase')
     plt.plot(res_1[:, 1], res_1[:, 2])
     plt.xlabel('Position [rad]')
-    plt.ylabel('Velocity [rad.s]')
+    plt.ylabel('Velocity [rad/s]')
     plt.grid()
     plt.savefig('3_c.png')
     plt.show()
@@ -163,8 +162,8 @@ if __name__ == '__main__':
     plt.figure()
     plt.title('Pendulum Oscillations')
     plt.plot(time,res_1[:, 1])
-    plt.xlabel('Time in s')
-    plt.ylabel('Angle in radians')
+    plt.xlabel('Time [s]')
+    plt.ylabel('Position [rad]')
     plt.grid()
     plt.show()
     

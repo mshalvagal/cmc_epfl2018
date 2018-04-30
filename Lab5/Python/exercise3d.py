@@ -193,7 +193,7 @@ def length_effect_constant_muscle_distance(muscles,pendulum,act1,act2,time,lengt
         res = sim.results()
         angular_position = res[:,1]
         frequency_pend[i] = find_freq_fft(angular_position,time_step)
-        amplitude_pend[i] = find_amplitude(angular_position, len(angular_position)/2)
+        amplitude_pend[i] = find_amplitude(angular_position, int(len(angular_position)/2))
         plt.figure()
         plt.plot(angular_position)
         plt.show()
