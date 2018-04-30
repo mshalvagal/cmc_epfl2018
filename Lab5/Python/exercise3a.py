@@ -28,7 +28,7 @@ plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
 
 
 def exercise3a():
-    """ Main function to run for Exercise 3.
+    """ Main function to run for Question 3a.
 
     Parameters
     ----------
@@ -40,10 +40,10 @@ def exercise3a():
     """
     plt.close('all')
     #Question 3a
-    m1_origin = np.array([-0.25, 0.0])  # Origin of Muscle 1
-    m1_insertion = np.array([0.0, -0.25])  # Insertion of Muscle 1
+    m1_origin = np.array([-0.3, 0.0])  # Origin of Muscle 1
+    m1_insertion = np.array([0.0, -0.5])  # Insertion of Muscle 1
 
-    m2_origin = np.array([0.25, 0.0])  # Origin of Muscle 2
+    m2_origin = np.array([0.4, 0.0])  # Origin of Muscle 2
     m2_insertion = np.array([0.0, -0.25])  # Insertion of Muscle 2
     
     theta=np.linspace(-np.pi/2,np.pi/2)
@@ -54,31 +54,34 @@ def exercise3a():
             2 * np.abs(m2_origin[0]) * np.abs(m2_insertion[1]) * np.sin(-theta))
     
     plt.figure('Lengths')
-    plt.title('Length of the muscle with respect to the position of the limb')
+    plt.title('Length of the muscle vs angular position of the limb')
     plt.plot(theta*180/np.pi, m1_length)
     plt.plot(theta*180/np.pi, m2_length)
     plt.xlabel('Position [deg]')
     plt.ylabel('Muscle length [m]')
     plt.legend(['M1','M2'])
     plt.grid()
-    
+    plt.savefig('Lengths.png')
+
     m1_moment_arm= m1_origin[0] * m1_insertion[1] * np.cos(theta) / m1_length
     m2_moment_arm= m2_origin[0] * m2_insertion[1] * np.cos(-theta) / m2_length
     
     plt.figure('Moment Arms')
-    plt.title('Moment arm over the muscle with respect to the position of the limb')
+    plt.title('Moment arm over the muscle vs angular position of the limb')
     plt.plot(theta*180/np.pi, m1_moment_arm)
     plt.plot(theta*180/np.pi, m2_moment_arm)
     plt.xlabel('Position [deg]')
     plt.ylabel('Moment arm [m]')
     plt.legend(['M1','M2'])
     plt.grid()
-    
+    plt.savefig('Moment_Arms.png')
+
     #Varying the attachement points
 
     #a1s=np.linspace(-0.5,-0.1,5)
-    a2s=np.linspace(-0.5,-0.1,5)
-    a1=-0.2 #completely symmetrical behavior
+    #a2s=np.linspace(-0.5,-0.1,5)
+    a2s=np.array([-0.6,-0.5,-0.3,-0.2,-0.1])
+    a1=-0.3 #completely symmetrical behavior
     
     m_lengths=np.zeros((len(a2s),len(theta)))
     m_moment_arms=np.zeros((len(a2s),len(theta)))
@@ -105,6 +108,7 @@ def exercise3a():
     plt.ylabel('Muscle length [m]')
     plt.legend(leg)
     plt.grid()
+
     
     plt.figure('3a_MA')
     plt.title('Moment arm over M1 with respect to the position of the limb')

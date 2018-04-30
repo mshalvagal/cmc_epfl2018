@@ -160,9 +160,7 @@ def amplitude_effect(sim):
     plt.savefig('3_e2.png')
     plt.show()
 
-#def exercise3e()
-if __name__ == '__main__':
-
+def exercise3e():
     """ Main function for question 3e
 
     Parameters
@@ -240,3 +238,6 @@ if __name__ == '__main__':
     
     #Effect of stim amplitudes
     amplitude_effect(sim)
+    
+if __name__ == '__main__':
+     exercise3e()
