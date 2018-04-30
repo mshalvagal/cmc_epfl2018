@@ -25,11 +25,11 @@ from System import System
 # Global settings for plotting
 # You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
-plt.rc('font', size=12.0)
-plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
-plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rc('font', size=26.0)
+plt.rc('axes', titlesize=30.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=24.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=16.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=16.0)    # fontsize of the tick labels
 
 
 def exercise4b_bias():
@@ -106,14 +106,14 @@ def exercise4b_bias():
     N_params.w=w_0
     b_0=N_params.b    
     
-    if False:
+    if True:
         #2.1 Play with scaling the bias
-        scale=np.array([0.2,1,5])
+        scale=np.array([0.5,1,2])
 
         #Figures
-        fig1=plt.figure('Phase')
+        fig1=plt.figure('4b_Phase_b1')
         ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig2=plt.figure('4b_Neurons_MP_b1')
         
         leg1=[]
         for i in range(0,len(scale)):
@@ -154,16 +154,17 @@ def exercise4b_bias():
     
             # Plotting the results
             ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Bias scaled with {}'.format(scale[i]))
+            leg1.append('Bias symmetrically scaled with {}'.format(scale[i]))
             ax2=fig2.add_subplot(len(scale),1,i+1)
             leg2=[]
             for j in range(1,5):
                 ax2.plot(res[:, 0], res[:, j+6])
                 leg2.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; bias scaled with {}'.format(scale[i]))    
+            ax2.set_title('Neurons Membrane Potential ; bias symmetrically scaled with {}'.format(scale[i]))    
             ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
+            if (i==len(scale)):
+                ax2.set_xlabel('Time [s]')
             fig2.legend(leg2)
 
             
@@ -176,14 +177,14 @@ def exercise4b_bias():
     
         fig2.show()
         
-    if False:
+    if True:
         #2.2 Play with scaling the bias of neuron 1-2 VS 3-4
-        scale=np.array([0.2,1,5])
+        scale=np.array([0.5,1,2])
 
         #Figures
-        fig1=plt.figure('Phase')
+        fig1=plt.figure('4b_Phase_b2')
         ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig2=plt.figure('4b_Neurons_MP_b2')
         
         leg1=[]
         for i in range(0,len(scale)):
@@ -224,16 +225,17 @@ def exercise4b_bias():
     
             # Plotting the results
             ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Bias scaled with {}'.format(scale[i]))
+            leg1.append('Bias of secondary neurons are scaled with {}'.format(scale[i]))
             ax2=fig2.add_subplot(len(scale),1,i+1)
             leg2=[]
             for j in range(1,5):
                 ax2.plot(res[:, 0], res[:, j+6])
                 leg2.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; bias of neuron 3 and 4 scaled with {}'.format(scale[i]))    
+            ax2.set_title('Neurons Membrane Potential ; bias of secondary neurons are scaled with {}'.format(scale[i]))    
             ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
+            if (i==len(scale)):
+                ax2.set_xlabel('Time [s]')
             fig2.legend(leg2)
 
             
@@ -248,12 +250,12 @@ def exercise4b_bias():
         
     if True:
         #2.3 Play with scaling the bias of neuron 1-3 VS 2-4
-        scale=np.array([0.2,1,5])
+        scale=np.array([0.5,1,2])
 
         #Figures
-        fig1=plt.figure('Phase')
+        fig1=plt.figure('4b_Phase_b3')
         ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig2=plt.figure('4b_Neurons_MP_b3')
         
         leg1=[]
         for i in range(0,len(scale)):
@@ -294,16 +296,17 @@ def exercise4b_bias():
     
             # Plotting the results
             ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Bias scaled with {}'.format(scale[i]))
+            leg1.append('Bias of right side neurons are scaled with {}'.format(scale[i]))
             ax2=fig2.add_subplot(len(scale),1,i+1)
             leg2=[]
             for j in range(1,5):
                 ax2.plot(res[:, 0], res[:, j+6])
                 leg2.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; bias of neuron 2 and 4 scaled with {}'.format(scale[i]))    
+            ax2.set_title('Neurons Membrane Potential ; bias of right side neurons are scaled with {}'.format(scale[i]))    
             ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
+            if (i==len(scale)):
+                ax2.set_xlabel('Time [s]')
             fig2.legend(leg2)
 
             

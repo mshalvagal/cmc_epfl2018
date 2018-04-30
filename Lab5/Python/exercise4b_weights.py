@@ -25,11 +25,11 @@ from System import System
 # Global settings for plotting
 # You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
-plt.rc('font', size=12.0)
-plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
-plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rc('font', size=26.0)
+plt.rc('axes', titlesize=30.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=24.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=16.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=16.0)    # fontsize of the tick labels
 
 
 def exercise4b_weights():
@@ -96,18 +96,18 @@ def exercise4b_weights():
 
     x0 = np.concatenate((x0_P, x0_M, x0_N))  # System initial conditions
     
-    if False:
+    if True:
         #1.1 Play with scaling the weights
-        scale=np.logspace(-1,1,3)
+        scale=np.array([0.2,1,5])
         w_0=np.transpose([[0., -10., 10., -10.],
                           [-10., 0., -10., 10.],
                           [-10., 0., 0., 0.],
                           [0., -10., 0., 0.]] )
         
         #Figures
-        fig1=plt.figure('Phase')
+        fig1=plt.figure('4b_Phase_w1')
         ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig2=plt.figure('4b_Neurons_MP_w1')
         
         leg1=[]
         for i in range(0,len(scale)):
@@ -150,16 +150,17 @@ def exercise4b_weights():
     
             # Plotting the results
             ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Weights scaled with {}'.format(scale[i]))
+            leg1.append('Weight matrix symmetrically scaled with {}'.format(scale[i]))
             ax2=fig2.add_subplot(len(scale),1,i+1)
             leg2=[]
             for j in range(1,5):
                 ax2.plot(res[:, 0], res[:, j+6])
                 leg2.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; weights scaled with {}'.format(scale[i]))    
+            ax2.set_title('Neurons Membrane Potential ; weight matrix symmetrically scaled with {}'.format(scale[i]))    
             ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
+            if (i==len(scale)):
+                ax2.set_xlabel('Time [s]')
             fig2.legend(leg2)
 
             
@@ -172,7 +173,7 @@ def exercise4b_weights():
     
         fig2.show()
         
-    if False:
+    if True:
         #1.2 Play with giving more or less weigth to 1-2 neurons
         scale=np.array([0.2,1,5])
         w_0=np.transpose([[0., -10., 10., -10.],
@@ -181,11 +182,11 @@ def exercise4b_weights():
                           [0., -10., 0., 0.]] )
         
         #Figures
-        fig1=plt.figure('Phase')
-        ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig3=plt.figure('4b_Phase_w2')
+        ax3=fig3.add_subplot(111)
+        fig4=plt.figure('4b_Neurons_MP_w2')
         
-        leg1=[]
+        leg3=[]
         for i in range(0,len(scale)):
             ##### Neural Network #####
             # The network consists of four neurons
@@ -226,26 +227,27 @@ def exercise4b_weights():
             res_muscles = sim.results_muscles()
     
             # Plotting the results
-            ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Weights scaled with {}'.format(scale[i]))
-            ax2=fig2.add_subplot(len(scale),1,i+1)
-            leg2=[]
+            ax3.plot(res[:, 1], res[:, 2])
+            leg3.append('Weights of secondary neurons are scaled with {}'.format(scale[i]))
+            ax4=fig4.add_subplot(len(scale),1,i+1)
+            leg4=[]
             for j in range(1,5):
-                ax2.plot(res[:, 0], res[:, j+6])
-                leg2.append('Neuron{}'.format(j))
+                ax4.plot(res[:, 0], res[:, j+6])
+                leg4.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; weights of neurons 3 and 4 are {} times more important'.format(scale[i]))    
-            ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
-            fig2.legend(leg2)
+            ax4.set_title('Neurons Membrane Potential ; weights of secondary neurons are scaled with {}'.format(scale[i]))    
+            ax4.set_ylabel('Membrane Potential [mV]')
+            if (i==len(scale)):
+                ax4.set_xlabel('Time [s]')
+            fig4.legend(leg4)
             
-        ax1.set_title('Pendulum Phase')
-        ax1.set_xlabel('Position [rad]')
-        ax1.set_ylabel('Velocity [rad.s]')
-        fig1.legend(leg1)
+        ax3.set_title('Pendulum Phase')
+        ax3.set_xlabel('Position [rad]')
+        ax3.set_ylabel('Velocity [rad.s]')
+        fig3.legend(leg3)
         
-        fig1.show()  
-        fig2.show()
+        fig3.show()  
+        fig4.show()
         
     if True:
         #1.3 Play with giving more or less weigth to 2-4 neurons
@@ -256,11 +258,11 @@ def exercise4b_weights():
                           [0., -10., 0., 0.]] )
         
         #Figures
-        fig1=plt.figure('Phase')
-        ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig5=plt.figure('4b_Phase_w3')
+        ax5=fig5.add_subplot(111)
+        fig6=plt.figure('4b_Neurons_MP_w3')
         
-        leg1=[]
+        leg5=[]
         for i in range(0,len(scale)):
             ##### Neural Network #####
             # The network consists of four neurons
@@ -300,26 +302,27 @@ def exercise4b_weights():
             res_muscles = sim.results_muscles()
     
             # Plotting the results
-            ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Weights scaled with {}'.format(scale[i]))
-            ax2=fig2.add_subplot(len(scale),1,i+1)
-            leg2=[]
+            ax5.plot(res[:, 1], res[:, 2])
+            leg5.append('Weights of right side neurons are scaled with {}'.format(scale[i]))
+            ax6=fig6.add_subplot(len(scale),1,i+1)
+            leg6=[]
             for j in range(1,5):
-                ax2.plot(res[:, 0], res[:, j+6])
-                leg2.append('Neuron{}'.format(j))
+                ax6.plot(res[:, 0], res[:, j+6])
+                leg6.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; weights of neurons 2 and 4 are {} times more important'.format(scale[i]))    
-            ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
-            fig2.legend(leg2)
+            ax6.set_title('Neurons Membrane Potential ; weights of right side neurons are scaled with {}'.format(scale[i]))    
+            ax6.set_ylabel('Membrane Potential [mV]')
+            if (i==len(scale)):
+                ax6.set_xlabel('Time [s]')
+            fig6.legend(leg6)
             
-        ax1.set_title('Pendulum Phase')
-        ax1.set_xlabel('Position [rad]')
-        ax1.set_ylabel('Velocity [rad.s]')
-        fig1.legend(leg1)
+        ax5.set_title('Pendulum Phase')
+        ax5.set_xlabel('Position [rad]')
+        ax5.set_ylabel('Velocity [rad.s]')
+        fig5.legend(leg5)
     
-        fig1.show()
-        fig2.show()
+        fig5.show()
+        fig6.show()
 """
     if DEFAULT["save_figures"] is False:
         plt.show()

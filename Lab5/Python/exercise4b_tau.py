@@ -25,11 +25,11 @@ from System import System
 # Global settings for plotting
 # You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
-plt.rc('font', size=12.0)
-plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
-plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rc('font', size=26.0)
+plt.rc('axes', titlesize=30.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=24.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=16.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=16.0)    # fontsize of the tick labels
 
 
 def exercise4b_tau():
@@ -82,7 +82,7 @@ def exercise4b_tau():
                    np.array([m2_origin, m2_insertion]))
     
     ##### Time #####
-    t_max = 5.  # Maximum simulation time
+    t_max = 2.  # Maximum simulation time
     time = np.arange(0., t_max, 0.001)  # Time vector
 
     ##### Model Initial Conditions #####
@@ -111,9 +111,9 @@ def exercise4b_tau():
         scale=np.array([0.2,1,5])
 
         #Figures
-        fig1=plt.figure('Phase')
+        fig1=plt.figure('4b_Phase_t1')
         ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig2=plt.figure('4b_Neurons_MP_t1')
         
         leg1=[]
         for i in range(0,len(scale)):
@@ -154,16 +154,17 @@ def exercise4b_tau():
     
             # Plotting the results
             ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Tau scaled with {}'.format(scale[i]))
+            leg1.append('Tau symmetrically scaled with {}'.format(scale[i]))
             ax2=fig2.add_subplot(len(scale),1,i+1)
             leg2=[]
             for j in range(1,5):
                 ax2.plot(res[:, 0], res[:, j+6])
                 leg2.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; tau scaled with {}'.format(scale[i]))    
+            ax2.set_title('Neurons Membrane Potential ; tau symmetrically scaled with {}'.format(scale[i]))    
             ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
+            if (i==len(scale)):
+                ax2.set_xlabel('Time [s]')
             fig2.legend(leg2)
 
             
@@ -176,16 +177,16 @@ def exercise4b_tau():
     
         fig2.show()
         
-    if False:
+    if True:
         #3.2 Play with scaling the tau of neuron 1-2 VS 3-4
-        scale=np.array([0.2,1,5])
+        scale=np.array([0.1,0.2,1])
 
         #Figures
-        fig1=plt.figure('Phase')
-        ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig3=plt.figure('4b_Phase_t2')
+        ax3=fig3.add_subplot(111)
+        fig4=plt.figure('4b_Neurons_MP_t2')
         
-        leg1=[]
+        leg3=[]
         for i in range(0,len(scale)):
             s=[1,1,scale[i],scale[i]]
             N_params.tau = tau_0*s
@@ -223,39 +224,40 @@ def exercise4b_tau():
             res_muscles = sim.results_muscles()
     
             # Plotting the results
-            ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Tau scaled with {}'.format(scale[i]))
-            ax2=fig2.add_subplot(len(scale),1,i+1)
-            leg2=[]
+            ax3.plot(res[:, 1], res[:, 2])
+            leg3.append('Taus of secondary neurons are scaled with {}'.format(scale[i]))
+            ax4=fig4.add_subplot(len(scale),1,i+1)
+            leg4=[]
             for j in range(1,5):
-                ax2.plot(res[:, 0], res[:, j+6])
-                leg2.append('Neuron{}'.format(j))
+                ax4.plot(res[:, 0], res[:, j+6])
+                leg4.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; tau of neuron 3 and 4 scaled with {}'.format(scale[i]))    
-            ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
-            fig2.legend(leg2)
+            ax4.set_title('Neurons Membrane Potential ; taus of secondary neurons are scaled with {}'.format(scale[i]))    
+            ax4.set_ylabel('Membrane Potential [mV]')
+            if (i==len(scale)):
+                ax4.set_xlabel('Time [s]')
+            fig4.legend(leg4)
 
             
-        ax1.set_title('Pendulum Phase')
-        ax1.set_xlabel('Position [rad]')
-        ax1.set_ylabel('Velocity [rad.s]')
-        fig1.legend(leg1)
+        ax3.set_title('Pendulum Phase')
+        ax3.set_xlabel('Position [rad]')
+        ax3.set_ylabel('Velocity [rad.s]')
+        fig3.legend(leg3)
         
-        fig1.show()
+        fig3.show()
     
-        fig2.show()
+        fig4.show()
         
-    if True:
+    if False:
         #3.3 Play with scaling the tau of neuron 1-3 VS 2-4
         scale=np.array([0.2,1,5])
 
         #Figures
-        fig1=plt.figure('Phase')
-        ax1=fig1.add_subplot(111)
-        fig2=plt.figure('Neurons_MP')
+        fig5=plt.figure('4b_Phase_t3')
+        ax5=fig5.add_subplot(111)
+        fig6=plt.figure('4b_Neurons_MP_t3')
         
-        leg1=[]
+        leg5=[]
         for i in range(0,len(scale)):
             s=[1,scale[i],1,scale[i]]
             N_params.tau = tau_0*s
@@ -293,28 +295,29 @@ def exercise4b_tau():
             res_muscles = sim.results_muscles()
     
             # Plotting the results
-            ax1.plot(res[:, 1], res[:, 2])
-            leg1.append('Tau scaled with {}'.format(scale[i]))
-            ax2=fig2.add_subplot(len(scale),1,i+1)
-            leg2=[]
+            ax5.plot(res[:, 1], res[:, 2])
+            leg5.append('Tau of right side neurons are scaled with {}'.format(scale[i]))
+            ax6=fig6.add_subplot(len(scale),1,i+1)
+            leg6=[]
             for j in range(1,5):
-                ax2.plot(res[:, 0], res[:, j+6])
-                leg2.append('Neuron{}'.format(j))
+                ax6.plot(res[:, 0], res[:, j+6])
+                leg6.append('Neuron{}'.format(j))
             
-            ax2.set_title('Neurons Membrane Potential ; tau of neuron 2 and 4 scaled with {}'.format(scale[i]))    
-            ax2.set_ylabel('Membrane Potential [mV]')
-            ax2.set_xlabel('Time [s]')
-            fig2.legend(leg2)
+            ax6.set_title('Neurons Membrane Potential ; tau of right side neurons are scaled with {}'.format(scale[i]))    
+            ax6.set_ylabel('Membrane Potential [mV]')
+            if (i==len(scale)):
+                ax6.set_xlabel('Time [s]')
+            fig6.legend(leg6)
 
             
-        ax1.set_title('Pendulum Phase')
-        ax1.set_xlabel('Position [rad]')
-        ax1.set_ylabel('Velocity [rad.s]')
-        fig1.legend(leg1)
+        ax5.set_title('Pendulum Phase')
+        ax5.set_xlabel('Position [rad]')
+        ax5.set_ylabel('Velocity [rad.s]')
+        fig5.legend(leg5)
         
-        fig1.show()
+        fig5.show()
     
-        fig2.show()
+        fig6.show()
         
 """
     if DEFAULT["save_figures"] is False:

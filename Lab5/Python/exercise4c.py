@@ -25,11 +25,11 @@ from System import System
 # Global settings for plotting
 # You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
-plt.rc('font', size=12.0)
-plt.rc('axes', titlesize=14.0)     # fontsize of the axes title
-plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=14.0)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=14.0)    # fontsize of the tick labels
+plt.rc('font', size=26.0)
+plt.rc('axes', titlesize=30.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=24.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=16.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=16.0)    # fontsize of the tick labels
 
 
 def exercise4c():
@@ -101,7 +101,7 @@ def exercise4c():
     sys.add_neural_system(neural_network)
 
     ##### Time #####
-    t_max = 6.  # Maximum simulation time
+    t_max = 3.  # Maximum simulation time
     time = np.arange(0., t_max, 0.001)  # Time vector
 
     ##### Model Initial Conditions #####
@@ -123,10 +123,10 @@ def exercise4c():
     sim = SystemSimulation(sys)  # Instantiate Simulation object
 
     # Add external inputs to neural network
-    intensity=5
-    part1=np.zeros((int(len(time)/3), 4))
-    part2=np.ones((int(len(time)/3), 4))*0.5*intensity
-    part3=np.ones((int(len(time)/3), 4))*1*intensity
+    intensity=1
+    part1=np.zeros((int(len(time)/t_max), 4))
+    part2=np.ones((int(len(time)/t_max), 4))*0.2*intensity
+    part3=np.ones((int(len(time)/t_max), 4))*intensity
     ext_in=np.concatenate((part1,part2,part3),axis=0)
     sim.add_external_inputs_to_network(ext_in)
 
@@ -145,29 +145,31 @@ def exercise4c():
     res_muscles = sim.results_muscles()
 
     # Plotting the results
-    plt.figure('Phase')
+    plt.figure('4c_Phase')
     plt.title('Pendulum Phase')
-    plt.plot(res[:, 1], res[:, 2])
+    leg=[]
+    plt.plot(res[0:int(len(time)/t_max), 1], res[0:int(len(time)/t_max), 2])
+    leg.append('No excitation')
+    plt.plot(res[int(len(time)/t_max):2*int(len(time)/t_max), 1], res[int(len(time)/t_max):2*int(len(time)/t_max), 2])
+    leg.append('Low external excitation [0.2]')
+    plt.plot(res[2*int(len(time)/t_max):len(time), 1], res[2*int(len(time)/t_max):len(time), 2])
+    leg.append('High external excitation [1]')
     plt.xlabel('Position [rad]')
     plt.ylabel('Velocity [rad.s]')
+    plt.legend(leg)
     plt.grid()
 
-    plt.figure('Neurons_MP')
+    plt.figure('4c_Neurons_MP')
     plt.title('Neurons  Membrane Potential')    
     leg=[]
     for i in range(1,5):
         plt.plot(res[:, 0], res[:, i+6])
-        leg.append('Neuron{}'.format(i))
+        leg.append('Neuron{}'.format(i)) 
+    plt.plot(res[:, 0], ext_in[:,1])
+    leg.append('External excitation') 
     plt.ylabel('Membrane Potential [mV]')
     plt.xlabel('Time [s]')
     plt.legend(leg)
-    plt.grid()
-    
-    plt.figure('Excitation')
-    plt.title('External excitation')    
-    plt.plot(res[:, 0], ext_in[:,1])
-    plt.ylabel('voltage input [mV]')
-    plt.xlabel('Time [s]')
     plt.grid()
     
     """
