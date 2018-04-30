@@ -120,82 +120,82 @@ def exercise3e():
     frequency_pend=np.zeros(len(muscle_forces))
     amplitude_pend=np.zeros(len(muscle_forces))
     
-#    for i,force in enumerate(muscle_forces):
-#        sys.muscle_sys.Muscle1.F_max = force
-#        sys.muscle_sys.Muscle2.F_max = force
-#        
-#        sim.initalize_system(x0, time)
-#        sim.simulate()
-#        res = sim.results()
-#        
-#        #computing the freuquency and amplitude
-#        angular_position = res[:,1]
-#        frequency_pend[i] = find_frequency(angular_position,time_step, int(len(angular_position)/2))
-#        amplitude_pend[i] = find_amplitude(angular_position, int(len(angular_position)/2))
-#        
-#    
-#    plt.figure()
-#    plt.subplot(121)
-#    plt.loglog(muscle_forces,frequency_pend)
-#    plt.grid()
-#    plt.ylabel('Pendulum Oscillation Frequency [Hz]')
-#    plt.xlabel('Maximal Muscle Force [N]')
-#    plt.subplot(122)
-#    plt.loglog(muscle_forces,amplitude_pend)
-#    plt.grid()
-#    plt.ylabel('Pendulum Oscillation Amplitude [rad]')
-#    plt.xlabel('Maximal Muscle Force [N]')
-#    plt.savefig('3_f.png')
-#    plt.show()
-#    
-#    muscle_forces = [1,5,10,100,1500]
-#    
-#    frequency_pend=np.zeros(len(muscle_forces))
-#    amplitude_pend=np.zeros(len(muscle_forces))
-#    
-#    plt.figure('Theta')
-#    plt.title('Pendulum angle')
-#    plt.ylabel('Position [rad]')
-#    plt.xlabel('Time [s]')
-#    
-#    plt.figure('Pendulum 3e')
-#    plt.title('Pendulum Phase')
-#    plt.xlabel('Position [rad]')
-#    plt.ylabel('Velocity [rad/s]')
-#    
-#    labels = []
-#    
-#    for i,force in enumerate(muscle_forces):
-#        sys.muscle_sys.Muscle1.F_max = force
-#        sys.muscle_sys.Muscle2.F_max = force
-#        
-#        sim.initalize_system(x0, time)
-#        sim.simulate()
-#        res = sim.results()
-#        
-#        #computing the freuquency and amplitude
-#        angular_position = res[:,1]
-#        frequency_pend[i] = find_frequency(angular_position,time_step, int(len(angular_position)/2))
-#        amplitude_pend[i] = find_amplitude(angular_position, int(len(angular_position)/2))
-#        
-#        plt.figure('Theta')
-#        plt.plot(time,angular_position)
-#        plt.grid()
-#        
-#        plt.figure('Pendulum 3e')
-#        plt.plot(res[:, 1], res[:, 2])
-#        plt.grid()
-#        
-#        labels.append(r'$F_{max}=$ ' + str(force))
-#    
-#    
-#    plt.figure('Pendulum 3e')
-#    plt.legend(labels)
-#    plt.savefig('3_f2.png')
-#    
-#    plt.figure('Theta')
-#    plt.legend(labels)
-#    plt.savefig('3_f3.png')
+    for i,force in enumerate(muscle_forces):
+       sys.muscle_sys.Muscle1.F_max = force
+       sys.muscle_sys.Muscle2.F_max = force
+       
+       sim.initalize_system(x0, time)
+       sim.simulate()
+       res = sim.results()
+       
+       #computing the freuquency and amplitude
+       angular_position = res[:,1]
+       frequency_pend[i] = find_frequency(angular_position,time_step, int(len(angular_position)/2))
+       amplitude_pend[i] = find_amplitude(angular_position, int(len(angular_position)/2))
+       
+   
+    plt.figure()
+    plt.subplot(121)
+    plt.loglog(muscle_forces,frequency_pend)
+    plt.grid()
+    plt.ylabel('Pendulum Oscillation Frequency [Hz]')
+    plt.xlabel('Maximal Muscle Force [N]')
+    plt.subplot(122)
+    plt.loglog(muscle_forces,amplitude_pend)
+    plt.grid()
+    plt.ylabel('Pendulum Oscillation Amplitude [rad]')
+    plt.xlabel('Maximal Muscle Force [N]')
+    plt.savefig('3_f.png')
+    plt.show()
+   
+    muscle_forces = [1,5,10,100,1500]
+   
+    frequency_pend=np.zeros(len(muscle_forces))
+    amplitude_pend=np.zeros(len(muscle_forces))
+   
+    plt.figure('Theta')
+    plt.title('Pendulum angle')
+    plt.ylabel('Position [rad]')
+    plt.xlabel('Time [s]')
+   
+    plt.figure('Pendulum 3e')
+    plt.title('Pendulum Phase')
+    plt.xlabel('Position [rad]')
+    plt.ylabel('Velocity [rad/s]')
+   
+    labels = []
+   
+    for i,force in enumerate(muscle_forces):
+       sys.muscle_sys.Muscle1.F_max = force
+       sys.muscle_sys.Muscle2.F_max = force
+       
+       sim.initalize_system(x0, time)
+       sim.simulate()
+       res = sim.results()
+       
+       #computing the freuquency and amplitude
+       angular_position = res[:,1]
+       frequency_pend[i] = find_frequency(angular_position,time_step, int(len(angular_position)/2))
+       amplitude_pend[i] = find_amplitude(angular_position, int(len(angular_position)/2))
+       
+       plt.figure('Theta')
+       plt.plot(time,angular_position)
+       plt.grid()
+       
+       plt.figure('Pendulum 3e')
+       plt.plot(res[:, 1], res[:, 2])
+       plt.grid()
+       
+       labels.append(r'$F_{max}=$ ' + str(force))
+   
+   
+    plt.figure('Pendulum 3e')
+    plt.legend(labels)
+    plt.savefig('3_f2.png')
+   
+    plt.figure('Theta')
+    plt.legend(labels)
+    plt.savefig('3_f3.png')
     
 #    Asymmetric Muscles
     
