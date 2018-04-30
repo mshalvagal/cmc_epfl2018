@@ -6,7 +6,7 @@ Created on Sat Apr 28 12:37:46 2018
 @author: manu
 """
 
-""" Lab 5 Exercise 3e
+""" Lab 5 Exercise 3f
 
 This file implements the pendulum system with two muscles attached
 
@@ -47,8 +47,8 @@ def find_amplitude(signal,index_start):
     amplitude = (np.max(signal_stat)-np.min(signal_stat))/2
     return amplitude
 
-def exercise3e():
-    """ Function to run for Exercise 3e.
+def exercise3f():
+    """ Function to run for Exercise 3f.
 
     Parameters
     ----------

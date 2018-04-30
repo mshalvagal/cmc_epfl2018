@@ -89,7 +89,8 @@ def mass_effect(muscles,pendulum,act1,act2,x0,time,time_step,mass_range):
         sim.simulate()
         res = sim.results()
         angular_position = res[:,1]
-        frequency_pend[i] = find_freq_fft(angular_position,time_step)
+        #frequency_pend[i] = find_frequency(angular_position,time_step)
+        frequency_pend[i] = find_frequency(angular_position,time_step,len(angular_position)/2)
         amplitude_pend[i] = find_amplitude(angular_position, len(angular_position)/2)
     plt.figure()
     plt.subplot(121)
@@ -285,7 +286,8 @@ def exercise3d():
     x0 = np.concatenate((x0_P, x0_M))  # System initial conditions
     
     #Effect of mass
-    mass_range = np.array([0.1,0.5,1,5,10]) #in kg,default mass at 1 kg
+    #mass_range = np.array([0.01,0.03,0.1,0.5,1,5,10,30,100]) #in kg,default mass at 1 kg
+    #mass_range = np.array([30,100,300,1000]) #in kg,default mass at 1 kg
     #mass_effect(muscles,pendulum,act1,act2,x0,time,time_step,mass_range)
     
     #we reinitialize the pendulum
@@ -293,8 +295,8 @@ def exercise3d():
     pendulum = Pendulum(P_params)  # Instantiate Pendulum object
   
     #Effect of length
-    length_range = np.array([0.21,0.3,0.5,1,2,5,10]) #in m, default length at 0.5 m
-    #length_effect(muscles,pendulum,act1,act2,x0,time,time_step,length_range)
+    length_range = np.array([0.21,0.3,0.5,1,2,5,10,50]) #in m, default length at 0.5 m
+    length_effect(muscles,pendulum,act1,act2,x0,time,time_step,length_range)
 
     #we reinitialize the pendulum
     P_params = PendulumParameters()  # Instantiate pendulum parameters
@@ -302,7 +304,7 @@ def exercise3d():
     
     #Effect of inertia
     inertia_range = np.array([0.01,0.03,0.1,0.33,1,3,10]) #in kg.m**2, default inertia at 0.33 kg.m**2
-    inertia_effect(muscles,pendulum,act1,act2,x0,time,time_step,inertia_range)
+    #inertia_effect(muscles,pendulum,act1,act2,x0,time,time_step,inertia_range)
         
     
     #we reinitialize the pendulum
