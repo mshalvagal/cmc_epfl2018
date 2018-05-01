@@ -1,0 +1,141 @@
+\documentclass{cmc}
+
+\begin{document}
+
+\pagestyle{fancy}
+\lhead{\textit{\textbf{Computational Motor Control, Spring 2018} \\
+    Webots Tutorial, Lab 6, UNGRADED}} \rhead{Student \\ Names}
+
+\section*{Webots mini tutorial}
+
+\textit{Instructions: This document contains the basic information
+  needed to set-up and get your self familiarized with Webots.  A
+  physics simulator which we will be using during the remaining part
+  of the course.}
+
+\section{Webots Installation}
+\label{sec:webots-installation}
+
+Follow the
+\href{https://biorob.epfl.ch/page-36417-en.html#faq-169995}{\corr{link}}
+to find the instructions necessary to download, install and activate
+Webots on your machine.
+
+\section{Start Webots}
+\label{sec:start-webots}
+
+After starting the Webots, choose the Guided Tour (which should be
+offered the first time you start Webots, otherwise you can also start
+it from the menu Help $\rightarrow$ Webots Guided Tour). Please go
+through all the Guided Tour examples and have a look at the short
+descriptions in the window. You can Stop, Run and Revert the examples
+by using the corresponding toolbar buttons. Please do try all these
+buttons:
+\begin{itemize}
+\item \textbf{Revert} : Reload the .wbt file and restarts the
+  simulation from the beginning
+\item \textbf{Step} : Go one simulation step forward (physics)
+\item \textbf{Real-time} : Run the simulation in real-time
+\item \textbf{Run} : Run the simulation at maximal speed with the
+  visualization
+\item \textbf{Fast} : Run the simulation at the maximal speed allowed
+  by the CPU power (OpenGL rendering is disabled for better
+  performance)
+\end{itemize}
+  
+Note that next to the toolbar buttons there are two indicators: The
+left indicator shows the simulation elapsed time. The value is
+displayed as Hours:Minutes:Seconds:Milliseconds. The elapsed time
+indicates the time, it stops when the simulation is stopped. The other
+indicator is the speedometer which indicates how fast the simulation
+is currently running with respect to real time. When the speedometer
+shows about 1x, this means that the speed of the displayed simulated
+bodies is approximately equal to the speed that real physical bodies
+would have.
+
+\section{Navigate in Webots}
+\label{sec:navigate-webots}
+
+Using some of the examples of the Guided Tour, learn how to navigate
+in 3D using the mouse: \textbf{To do}: Try pressing each of the mouse
+buttons and the wheel while dragging the mouse left/right/up/down.
+
+It is also possible to move objects using the mouse. This can be
+achieved while the simulation is stopped or running. In order to move
+an object: first select the object with a left mouse click, then hold
+down the shift key and use the mouse:
+\begin{itemize}
+\item Translation: press the left mouse button to shift solid objects
+  in the xz-plane (parallel to the ground).
+\item Lift: press both left and right mouse buttons (or the middle
+  mouse button), and move the mouse up/down to lift/lower a solid
+  object.
+\item Axis-aligned handles: When a solid object is selected, some
+  arrow-shaped handles appear in the 3D window. These handles can be
+  used to translate and rotate the object along the corresponding axis
+\end{itemize}
+
+To apply a force to an object, place the mouse pointer where the force
+will apply, hold down the Alt key and left mouse button together while
+dragging the mouse. Linux users should also hold down the Control key
+(Ctrl) together with the Alt key.
+
+\section{Scene Tree}
+\label{sec:scene-tree}
+
+In Webots, the Scene Tree is the window that describes the world model
+in a VRML-like language. Geometrical shapes and dimensions, color and
+textures, physical properties ... all these different parameters are
+defined in the Scene Tree. As an example you can try to modify the
+gravity in some of the examples of the Guided Tour.  For example, open
+one of these worlds: Ghostdog, Gantry Robot or Q-RIO Robot
+\begin{itemize}
+\item Open the Scene Tree window if it is not opened yet (Menu Tools
+  $\rightarrow$ SceneTree)
+\item In the Scene Tree, expand the topmost node: WorldInfo
+\item In the WorldInfo node: select the gravity field
+\item In the gravity field: change the y gravity component from -9.81
+  to 0.
+\item Run the simulation: now your simulation should be running in
+  zero-gravity!
+\end{itemize}
+
+The field WorldInfo $\rightarrow$ basicSimulationStep specifies the
+duration of the simulation step in milliseconds. The simulation step
+defines how much to advance in simulated time before recomputing
+(integrating) the physics forces. Rigid bodies simulation is like
+integration: The smaller the simulation step, the more accurate the
+simulation, the larger the simulation step, the faster the
+simulation. If the simulation step is too large, unrealistic behavior
+may arise, for example: instability (vibration or explosion) of the
+simulation, robot passing though the ground or walls, etc. If the step
+is too small the simulation becomes too slow and you may have to wait
+too long for your results. Because there is this trade off between CPU
+time and faithfulness, it is important to always adjust the simulation
+step.
+
+\textbf{To do}: Open some of the worlds of Guided Tour and try to
+increase / decrease the simulation step and Run the simulation
+again. What do you notice?
+
+\section{Basic concepts in Webots}
+\label{sec:basic-conc-webots}
+
+Please read sections Getting Started with Webots and Language Setup
+Webots User Guide (Help $\rightarrow$ User Guide) to understand the
+basic concepts of Webots (e.g. controllers, worlds, physics).
+
+\textbf{TO DO : } Go to File $\rightarrow$ Open Sample World
+$\rightarrow$ and search for python in search field and open
+example.wbt file. If the search fails, in sample world window navigate
+to languages $\rightarrow$ python $\rightarrow$ example.wbt.
+Explore the example file and use the concepts learnt earlier to get
+yourself familiar with Webots and Python.
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
