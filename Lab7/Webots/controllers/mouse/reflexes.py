@@ -181,12 +181,12 @@ class Reflexes(object):
         # print("STANCE")
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.45
-        K2 = 0.55
-        K3 = 0.05
-        K4 = 0.2
+        K1 = 0.05
+        K2 = 0.05
+        K3 = 0.5
+        K4 = 0.3
         K5 = 0.2
-        K6 = 0.8
+        K6 = 0.05
 
         self.activations[side + 'H_M_PMA'] = 0.05
         self.activations[side + 'H_M_CF'] = K1 if (
@@ -213,8 +213,8 @@ class Reflexes(object):
 
         # MUSCLE ACTIVATION CONSTANTS
         K1 = 0.1
-        K2 = 0.05
-        K3 = 0.3
+        K2 = 0.3
+        K3 = 0.8
 
         self.activations[side + 'H_M_PMA'] = K1 + 0.01 * \
             (0.69813 - self.angles[side + 'H_J_KNEE'])
@@ -237,7 +237,7 @@ class Reflexes(object):
         # TRANSITION TO TOUCH_DOWN PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.05
+        K1 = 0.5
         K2 = 0.2
 
         self.activations[side + 'H_M_PMA'] = 0.01
