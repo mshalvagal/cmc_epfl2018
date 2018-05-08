@@ -1,0 +1,42 @@
+PROTO fore_l_left_bounding []
+{
+Transform {
+  scale 1 1 1
+  translation 0 0 0
+  children
+  [
+    Shape
+    {
+      geometry IndexedFaceSet
+      {
+        creaseAngle .5
+        solid FALSE
+        coord Coordinate
+        {
+          point
+          [
+            0.62067 0.92375 -0.66597, 0.6213 0.91784 -0.57152, 0.74837 0.99078 -0.66262, 0.749 0.98486 -0.56817, 
+            1.10384 0.00617 -0.72669, 1.10447 0.00025 -0.63223, 1.23154 0.07319 -0.72334, 1.23217 0.06727 -0.62889
+          ]
+        }
+        coordIndex
+        [
+          1,3,0,-1, 4,1,0,-1, 0,3,2,-1, 2,4,0,-1, 1,7,3,-1, 5,1,4,-1, 
+          5,7,1,-1, 3,7,2,-1, 6,4,2,-1, 2,7,6,-1, 6,5,4,-1, 7,5,6,-1
+        ]
+      }
+      appearance Appearance
+      {
+        material Material
+        {
+	       ambientIntensity 0.2
+	       diffuseColor 0.9 0.9 0.9
+	       specularColor .1 .1 .1
+	       shininess .5
+        }
+      }
+    }
+  ]
+}
+
+}

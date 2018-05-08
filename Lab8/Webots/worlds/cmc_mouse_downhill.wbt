@@ -1,0 +1,1505 @@
+#VRML_SIM R2018a utf8
+WorldInfo {
+  gravity 0 -981 0
+  basicTimeStep 1
+  FPS 24
+  lineScale 1
+  contactProperties [
+    DEF FOOT ContactProperties {
+      material1 "hind_foot"
+      material2 "floor"
+      coulombFriction [
+        -1
+      ]
+    }
+    DEF TOE ContactProperties {
+      material1 "hind_toe"
+      material2 "floor"
+      coulombFriction [
+        -1
+      ]
+    }
+    DEF FORE ContactProperties {
+      material1 "floor"
+      material2 "forepaw"
+      coulombFriction [
+        0
+      ]
+      bounce 0.1
+      forceDependentSlip [
+        -1
+      ]
+    }
+  ]
+}
+Viewpoint {
+  fieldOfView 0.2
+  orientation -0.00024989792103666974 0.9987502292095027 0.049979167710104425 3.131605151089793
+  position 9.688789812825606 13.484693877317998 -115.91228082197624
+  follow "MOUSE"
+  followSmoothness 0
+}
+TexturedBackground {
+  texture "noon_cloudy_empty"
+}
+TexturedBackgroundLight {
+  castLensFlares TRUE
+}
+DEF Floor Solid {
+  translation -2.5 0 -25
+  children [
+    DEF Floor Group {
+      children [
+        Transform {
+          children [
+            Shape {
+              appearance Appearance {
+                texture ImageTexture {
+                  url [
+                    "textures/marble.jpg"
+                  ]
+                }
+              }
+              geometry ElevationGrid {
+                xDimension 25
+                zDimension 50
+              }
+            }
+          ]
+        }
+        DEF Hill Transform {
+          translation 24 0 0
+          rotation 0 0 1 -0.0800003061004253
+          children [
+            Shape {
+              appearance Appearance {
+                texture ImageTexture {
+                  url [
+                    "textures/marble.jpg"
+                  ]
+                }
+              }
+              geometry ElevationGrid {
+                xDimension 125
+                zDimension 50
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  contactMaterial "floor"
+  boundingObject USE Floor
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction 0.7 0.7 0
+  castShadows TRUE
+}
+DEF JOINT_T Transform {
+  translation -20 -20 0
+  children [
+    DEF JOINT Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0 1
+          transparency 0.25
+        }
+      }
+      geometry Sphere {
+        radius 0.1
+      }
+      castShadows FALSE
+    }
+  ]
+}
+DEF MOUSE Supervisor {
+  translation 9 0 0
+  children [
+    DEF spine Solid {
+      children [
+        DEF SPINE Transform {
+          children [
+            DEF SPINE spine {
+            }
+          ]
+        }
+        DEF SKULL Transform {
+          children [
+            DEF skull Solid {
+              children [
+                DEF SKULL skull {
+                }
+              ]
+              name "skull"
+              boundingObject Transform {
+                translation 2.25 1.75 0
+                children [
+                  Box {
+                    size 1.25 0.75 1
+                  }
+                ]
+              }
+              physics Physics {
+                density -1
+                mass 5.35
+                centerOfMass [
+                  2.25 1.75 0
+                ]
+                inertiaMatrix [
+                  202 423 413
+                  0 0 0
+                ]
+              }
+            }
+          ]
+        }
+        DEF PELVIS Transform {
+          children [
+            DEF PEVIS_JOINT HingeJoint {
+              jointParameters HingeJointParameters {
+                position -0.15
+                axis 0 0 1
+                anchor -1.05 0.77 0.3
+              }
+              device [
+                RotationalMotor {
+                  name "H_J_PELVIS"
+                  maxTorque 1000000
+                }
+              ]
+              endPoint Solid {
+                translation 0 0 -1.11022e-16
+                rotation 0 0 -1 0.1499999999999986
+                children [
+                  DEF LH_G1_PELVIS GPS {
+                    translation -0.8 1.15 -0.19999999999999998
+                    name "LH_G1_PELVIS"
+                  }
+                  DEF LH_G2_PELVIS GPS {
+                    translation -1.3 0.5299999999999994 -0.30000000000000004
+                    name "LH_G2_PELVIS"
+                  }
+                  DEF RH_G1_PELVIS GPS {
+                    translation -0.8 1.15 0.2
+                    name "RH_G1_PELVIS"
+                  }
+                  DEF RH_G2_PELVIS GPS {
+                    translation -1.3 0.5299999999999994 0.3
+                    name "RH_G2_PELVIS"
+                  }
+                  DEF PELVIS pelvis {
+                  }
+                  DEF RIGHT_HIND Transform {
+                    children [
+                      DEF HIP_JOINT Transform {
+                        rotation 0 0 1 0
+                        children [
+                          DEF HIP_JOINT HingeJoint {
+                            jointParameters HingeJointParameters {
+                              axis 0 0 1
+                              anchor -1.05 0.77 0.3
+                              minStop -1.9198
+                              maxStop 0.174532
+                            }
+                            device [
+                              RotationalMotor {
+                                name "RH_J_HIP"
+                                controlPID 100 0 0
+                                maxTorque 10000000
+                              }
+                              PositionSensor {
+                                name "RH_J_HIP_POS"
+                              }
+                            ]
+                            endPoint DEF femur Solid {
+                              translation 2.220446049250313e-16 0 0
+                              rotation 0 0 1 0
+                              children [
+                                DEF RH_G1_HIP GPS {
+                                  translation -0.5930000000000002 0.989 0.556
+                                  rotation 0 0 1 0
+                                  name "RH_G1_HIP"
+                                }
+                                DEF RH_G2_HIP GPS {
+                                  translation 0 1.25 0.62
+                                  rotation 0 0 1 0
+                                  name "RH_G2_HIP"
+                                }
+                                DEF HIP_J_V Transform {
+                                  translation -1.05 0.77 0.3
+                                  children [
+                                    USE JOINT
+                                  ]
+                                }
+                                DEF RIGHT_FEMUR Transform {
+                                  children [
+                                    DEF RIGHT_FEMUR femur_right {
+                                    }
+                                  ]
+                                }
+                                DEF KNEE_JOINT Transform {
+                                  children [
+                                    DEF KNEE_JOINT HingeJoint {
+                                      jointParameters HingeJointParameters {
+                                        axis 0 0 1
+                                        anchor 0 1.05 0.62
+                                        minStop -0.1
+                                        maxStop 1.8326
+                                      }
+                                      device [
+                                        RotationalMotor {
+                                          name "RH_J_KNEE"
+                                          minPosition -0.1
+                                          maxPosition 1.8326
+                                          maxTorque 10000000
+                                        }
+                                        PositionSensor {
+                                          name "RH_J_KNEE_POS"
+                                        }
+                                      ]
+                                      endPoint DEF tibia Solid {
+                                        translation -5.551115123125783e-17 0 0
+                                        rotation 0 0 1 0
+                                        children [
+                                          DEF RH_G1_KNEE GPS {
+                                            translation -0.4830000000000001 0.5289999999999996 0.7260000000000002
+                                            rotation 0 0 1 0
+                                            name "RH_G1_KNEE"
+                                          }
+                                          DEF RH_G2_KNEE GPS {
+                                            translation -1.1 0.1 0.69
+                                            rotation 0 0 1 0
+                                            name "RH_G2_KNEE"
+                                          }
+                                          DEF KNEE_J_V Transform {
+                                            translation 0 1.02 0.62
+                                            children [
+                                              USE JOINT
+                                            ]
+                                          }
+                                          DEF RIGHT_TIBIA Transform {
+                                            children [
+                                              DEF RIGHT_TIBIA tibia_right {
+                                              }
+                                            ]
+                                          }
+                                          DEF ANKLE_JOINT Transform {
+                                            children [
+                                              DEF ANKLE_JOINT HingeJoint {
+                                                jointParameters HingeJointParameters {
+                                                  axis 0 0 1
+                                                  anchor -0.95 0.1 0.69
+                                                  minStop -1.4835
+                                                  maxStop 0.2618
+                                                }
+                                                device [
+                                                  RotationalMotor {
+                                                    name "RH_J_ANKLE"
+                                                    maxTorque 10000000
+                                                  }
+                                                  PositionSensor {
+                                                    name "RH_J_ANKLE_POS"
+                                                  }
+                                                ]
+                                                endPoint DEF foot Solid {
+                                                  rotation 0 0 1 0
+                                                  children [
+                                                    DEF RH_G1_ANKLE GPS {
+                                                      translation -0.65 0.1 0.69
+                                                      rotation 0 0 1 0
+                                                      name "RH_G1_ANKLE"
+                                                    }
+                                                    DEF ANKLE_J_V Transform {
+                                                      translation -0.95 0.1 0.69
+                                                      children [
+                                                        USE JOINT
+                                                      ]
+                                                    }
+                                                    DEF RIGHT_FOOT Transform {
+                                                      children [
+                                                        DEF RIGHT_FOOT foot_right {
+                                                        }
+                                                      ]
+                                                    }
+                                                    DEF RIGHT_TOUCH TouchSensor {
+                                                      name "RIGHT_TOUCH"
+                                                      boundingObject Transform {
+                                                        translation -0.75 0.06 0.69
+                                                        children [
+                                                          Box {
+                                                            size 0.75 0.1 0.3
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                    DEF MTP_JOINT Transform {
+                                                      children [
+                                                        DEF MTP_JOINT HingeJoint {
+                                                          jointParameters HingeJointParameters {
+                                                            axis 0 0 1
+                                                            anchor -0.37 0.1 0.69
+                                                            maxStop 0.87
+                                                            springConstant 1000
+                                                            dampingConstant 10
+                                                          }
+                                                          device [
+                                                            RotationalMotor {
+                                                              name "RH_J_MTP"
+                                                              maxTorque 10000000
+                                                            }
+                                                            PositionSensor {
+                                                              name "RH_J_MTP_POS"
+                                                            }
+                                                          ]
+                                                          endPoint DEF toe Solid {
+                                                            rotation 0 0 1 0
+                                                            children [
+                                                              DEF MTP_J_V Transform {
+                                                                translation -0.37 0.1 0.69
+                                                                children [
+                                                                  USE JOINT
+                                                                ]
+                                                              }
+                                                              DEF RIGHT_TOE Transform {
+                                                                children [
+                                                                  DEF RIGHT_TOE toe_right {
+                                                                  }
+                                                                ]
+                                                              }
+                                                              DEF RIGHT_TOE_TOUCH TouchSensor {
+                                                                name "RIGHT_TOE_TOUCH"
+                                                                boundingObject Transform {
+                                                                  translation -0.15 0.06 0.69
+                                                                  children [
+                                                                    Box {
+                                                                      size 0.5 0.1 0.3
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              }
+                                                            ]
+                                                            name "hind_toe"
+                                                            contactMaterial "hind_toe"
+                                                            boundingObject Transform {
+                                                              translation -0.15000000000000002 0.06 0.69
+                                                              children [
+                                                                Box {
+                                                                  size 0.4 0.1 0.3
+                                                                }
+                                                              ]
+                                                            }
+                                                            physics Physics {
+                                                              density -1
+                                                              mass 0.344
+                                                              centerOfMass [
+                                                                -0.15 0.05999999999999999 0.69
+                                                              ]
+                                                              inertiaMatrix [
+                                                                0.0061 1.26 1.26
+                                                                0 0 0
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                  name "hind_foot"
+                                                  boundingObject Transform {
+                                                    translation -0.75 0.06 0.69
+                                                    children [
+                                                      Box {
+                                                        size 0.75 0.1 0.3
+                                                      }
+                                                    ]
+                                                  }
+                                                  physics Physics {
+                                                    density -1
+                                                    mass 0.344
+                                                    centerOfMass [
+                                                      -0.7500000000000001 0.06 0.6900000000000001
+                                                    ]
+                                                    inertiaMatrix [
+                                                      0.0061 1.26 1.26
+                                                      0 0 0
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                        name "tibia"
+                                        boundingObject tibia_right_bounding {
+                                        }
+                                        physics Physics {
+                                          density -1
+                                          mass 1
+                                          centerOfMass [
+                                            -0.36667566780006855 0.6446762157292198 0.6896702116117532
+                                          ]
+                                          inertiaMatrix [
+                                            3.73 6.8 4.1
+                                            0 0 0
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                              name "femur"
+                              boundingObject femur_right_bounding {
+                              }
+                              physics Physics {
+                                density -1
+                                mass 1.11
+                                centerOfMass [
+                                  -0.4010683160075702 0.9898398971813114 0.49694152327508456
+                                ]
+                                inertiaMatrix [
+                                  6.28 4.42 9.1
+                                  0 0 0
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                  DEF LEFT_HIND Transform {
+                    children [
+                      DEF HIP_JOINT Transform {
+                        rotation 0 0 1 0
+                        children [
+                          DEF HIP_JOINT HingeJoint {
+                            jointParameters HingeJointParameters {
+                              axis 0 0 1
+                              anchor -1.05 0.77 -0.3
+                              minStop -1.9198
+                              maxStop 0.174532
+                            }
+                            device [
+                              RotationalMotor {
+                                name "LH_J_HIP"
+                                maxTorque 10000000
+                              }
+                              PositionSensor {
+                                name "LH_J_HIP_POS"
+                              }
+                            ]
+                            endPoint DEF femur Solid {
+                              rotation 0 0 1 0
+                              children [
+                                DEF LH_G1_HIP GPS {
+                                  translation -0.5930000000000002 0.989 -0.556
+                                  rotation 0 0 1 0
+                                  name "LH_G1_HIP"
+                                }
+                                DEF LH_G2_HIP GPS {
+                                  translation 0 1.25 -0.62
+                                  rotation 0 0 1 0
+                                  name "LH_G2_HIP"
+                                }
+                                DEF HIP_J_V Transform {
+                                  translation -1.05 0.77 -0.3
+                                  children [
+                                    USE JOINT
+                                  ]
+                                }
+                                DEF LEFT_FEMUR Transform {
+                                  children [
+                                    DEF LEFT_FEMUR femur_left {
+                                    }
+                                  ]
+                                }
+                                DEF KNEE_JOINT Transform {
+                                  children [
+                                    DEF KNEE_JOINT HingeJoint {
+                                      jointParameters HingeJointParameters {
+                                        axis 0 0 1
+                                        anchor 0 1.05 -0.62
+                                        minStop -0.05
+                                        maxStop 1.8326
+                                      }
+                                      device [
+                                        RotationalMotor {
+                                          name "LH_J_KNEE"
+                                          maxTorque 10000000
+                                        }
+                                        PositionSensor {
+                                          name "LH_J_KNEE_POS"
+                                        }
+                                      ]
+                                      endPoint DEF tibia Solid {
+                                        translation -5.551115123125783e-17 0 0
+                                        rotation 0 0 1 0
+                                        children [
+                                          DEF LH_G1_KNEE GPS {
+                                            translation -0.4830000000000001 0.5289999999999996 -0.726
+                                            rotation 0 0 1 0
+                                            name "LH_G1_KNEE"
+                                          }
+                                          DEF LH_G2_KNEE GPS {
+                                            translation -1 0.1 -0.69
+                                            rotation 0 0 1 0
+                                            name "LH_G2_KNEE"
+                                          }
+                                          DEF KNEE_J_V Transform {
+                                            translation 0 1.02 -0.62
+                                            children [
+                                              USE JOINT
+                                            ]
+                                          }
+                                          DEF LEFT_TIBIA Transform {
+                                            children [
+                                              DEF LEFT_TIBIA tibia_left {
+                                              }
+                                            ]
+                                          }
+                                          DEF ANKLE_JOINT Transform {
+                                            children [
+                                              DEF ANKLE_JOINT HingeJoint {
+                                                jointParameters HingeJointParameters {
+                                                  axis 0 0 1
+                                                  anchor -0.95 0.1 -0.69
+                                                  minStop -1.4835
+                                                  maxStop 0.349
+                                                }
+                                                device [
+                                                  RotationalMotor {
+                                                    name "LH_J_ANKLE"
+                                                    maxTorque 10000000
+                                                  }
+                                                  PositionSensor {
+                                                    name "LH_J_ANKLE_POS"
+                                                  }
+                                                ]
+                                                endPoint DEF foot Solid {
+                                                  rotation 0 0 1 0
+                                                  children [
+                                                    DEF LH_G1_ANKLE GPS {
+                                                      translation -0.65 0.1 -0.69
+                                                      rotation 0 0 1 0
+                                                      name "LH_G1_ANKLE"
+                                                    }
+                                                    DEF ANKLE_J_V Transform {
+                                                      translation -0.95 0.1 -0.69
+                                                      children [
+                                                        USE JOINT
+                                                      ]
+                                                    }
+                                                    DEF LEFT_FOOT Transform {
+                                                      children [
+                                                        DEF LEFT_FOOT foot_left {
+                                                        }
+                                                      ]
+                                                    }
+                                                    DEF LEFT_TOUCH TouchSensor {
+                                                      name "LEFT_TOUCH"
+                                                      boundingObject Transform {
+                                                        translation -0.75 0.06 -0.69
+                                                        children [
+                                                          Box {
+                                                            size 0.75 0.1 0.3
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                    DEF MTP_JOINT Transform {
+                                                      children [
+                                                        DEF MTP_JOINT HingeJoint {
+                                                          jointParameters HingeJointParameters {
+                                                            axis 0 0 1
+                                                            anchor -0.37 0.1 -0.69
+                                                            maxStop 0.87
+                                                            springConstant 1
+                                                            dampingConstant 1000
+                                                          }
+                                                          device [
+                                                            RotationalMotor {
+                                                              name "LH_J_MTP"
+                                                              maxTorque 10000000
+                                                            }
+                                                            PositionSensor {
+                                                              name "LH_J_MTP_POS"
+                                                            }
+                                                          ]
+                                                          endPoint DEF toe Solid {
+                                                            rotation 0 0 1 0
+                                                            children [
+                                                              DEF MTP_J_V Transform {
+                                                                translation -0.37 0.05 -0.69
+                                                                children [
+                                                                  USE JOINT
+                                                                ]
+                                                              }
+                                                              DEF LEFT_TOE Transform {
+                                                                children [
+                                                                  DEF LEFT_TOE toe_left {
+                                                                  }
+                                                                ]
+                                                              }
+                                                              DEF LEFT_TOE_TOUCH TouchSensor {
+                                                                name "LEFT_TOE_TOUCH"
+                                                                boundingObject Transform {
+                                                                  translation -0.15 0.06 -0.69
+                                                                  children [
+                                                                    Box {
+                                                                      size 0.5 0.1 0.3
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              }
+                                                            ]
+                                                            name "hind_toe"
+                                                            contactMaterial "hind_toe"
+                                                            boundingObject Transform {
+                                                              translation -0.15 0.06 -0.69
+                                                              children [
+                                                                Box {
+                                                                  size 0.4 0.1 0.3
+                                                                }
+                                                              ]
+                                                            }
+                                                            physics Physics {
+                                                              density -1
+                                                              mass 0.344
+                                                              centerOfMass [
+                                                                -0.15 0.05999999999999999 -0.69
+                                                              ]
+                                                              inertiaMatrix [
+                                                                0.0061 1.26 1.26
+                                                                0 0 0
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                  name "hind_foot"
+                                                  boundingObject Transform {
+                                                    translation -0.75 0.06 -0.69
+                                                    children [
+                                                      Box {
+                                                        size 0.75 0.1 0.3
+                                                      }
+                                                    ]
+                                                  }
+                                                  physics Physics {
+                                                    density -1
+                                                    mass 0.344
+                                                    centerOfMass [
+                                                      -0.7500000000000001 0.06 -0.6900000000000001
+                                                    ]
+                                                    inertiaMatrix [
+                                                      0.0061 1.26 1.26
+                                                      0 0 0
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                        name "knee_left"
+                                        boundingObject tibia_left_bounding {
+                                        }
+                                        physics Physics {
+                                          density -1
+                                          mass 1
+                                          centerOfMass [
+                                            -0.36702019115639944 0.6455226638938077 -0.6924352231874481
+                                          ]
+                                          inertiaMatrix [
+                                            3.73 6.8 4.1
+                                            0 0 0
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                              name "femur_left"
+                              boundingObject femur_left_bounding {
+                              }
+                              physics Physics {
+                                density -1
+                                mass 1.1
+                                centerOfMass [
+                                  -0.4033206231421576 0.9891895163243732 -0.4958853621409063
+                                ]
+                                inertiaMatrix [
+                                  6.28 4.24 9.1
+                                  0 0 0
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+                boundingObject pelvis_bounding {
+                }
+                physics Physics {
+                  density -1
+                  mass 5
+                  centerOfMass [
+                    -0.8641049701698237 0.956791906973227 0.00025559975521903766
+                  ]
+                  inertiaMatrix [
+                    1 1 1
+                    0 0 0
+                  ]
+                }
+              }
+            }
+          ]
+        }
+        DEF RIBS Transform {
+          children [
+            DEF RIBS ribs {
+            }
+          ]
+        }
+        DEF TAIL_JOINT HingeJoint {
+          jointParameters HingeJointParameters {
+            position -1
+            axis 0 0 1
+            anchor -1.05 0.77 0.3
+          }
+          device [
+            RotationalMotor {
+              name "J_TAIL"
+              maxTorque 1000000
+            }
+          ]
+          endPoint Solid {
+            translation -0.98 -0.63 0
+            rotation 0 0 -1 0.9999999999999998
+            children [
+              tail {
+              }
+            ]
+            name "tail"
+          }
+        }
+      ]
+      name "spine"
+      boundingObject DEF SPINE Group {
+        children [
+          Transform {
+            translation 0 1.3 0
+            children [
+              Box {
+                size 2.5 1 1
+              }
+            ]
+          }
+        ]
+      }
+      physics Physics {
+        density -1
+        mass 25
+        centerOfMass [
+          0 1.3 0
+        ]
+        inertiaMatrix [
+          981 1353 1518
+          0 0 0
+        ]
+      }
+    }
+    DEF LEFT_FORE_LIMB Transform {
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position 0.65
+            axis 0 0 1
+            anchor 1.1 1.6 -0.16
+          }
+          device [
+            RotationalMotor {
+              name "LF_J_SCAPULA"
+              maxTorque 10000000
+            }
+            PositionSensor {
+              name "LF_J_SCAPULA_POS"
+            }
+          ]
+          endPoint DEF scapula Solid {
+            translation 1.1926060707737018 -0.33943912398813314 0
+            rotation 0 0 1 0.6499999999999999
+            children [
+              DEF SCAPULA_J_V Transform {
+                translation 1.1 1.6 -0.16
+                children [
+                  USE JOINT
+                ]
+              }
+              DEF LEFT_SCAPULA scapula_left {
+              }
+              DEF FORE_U_J_T Transform {
+                children [
+                  DEF FORE_U_J HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0 0 1
+                      anchor 1.39 1.16 -0.45
+                    }
+                    device [
+                      RotationalMotor {
+                        name "LF_J_UPPER"
+                        maxTorque 10000000
+                      }
+                      PositionSensor {
+                        name "LF_J_UPPER_POS"
+                      }
+                    ]
+                    endPoint DEF fore_u Solid {
+                      rotation 0 0 1 0
+                      children [
+                        DEF FORE_U_V Transform {
+                          translation 1.39 1.16 -0.45
+                          children [
+                            USE JOINT
+                          ]
+                        }
+                        DEF LEFT_FORE_U fore_u_left {
+                        }
+                        DEF FORE_L_J_T Transform {
+                          rotation 0 0 1 0
+                          children [
+                            DEF FORE_L_J HingeJoint {
+                              jointParameters HingeJointParameters {
+                                position -0.3
+                                axis 0 0 1
+                                anchor 0.77 0.84 -0.62
+                              }
+                              device [
+                                RotationalMotor {
+                                  name "LF_J_LOWER"
+                                  maxTorque 10000000
+                                }
+                                PositionSensor {
+                                  name "LF_J_LOWER_POS"
+                                }
+                              ]
+                              endPoint DEF fore_l Solid {
+                                translation -0.21384607022224167 0.2650679082637225 -1.1102230246251565e-16
+                                rotation 0 0 -0.9999999999999999 0.3000000000000006
+                                children [
+                                  DEF FORE_L_J_V Transform {
+                                    translation 0.77 0.84 -0.62
+                                    children [
+                                      USE JOINT
+                                    ]
+                                  }
+                                  DEF LEFT_FORE_L fore_l_left {
+                                  }
+                                  DEF FOREPAW_L_J HingeJoint {
+                                    jointParameters HingeJointParameters {
+                                      position -0.5
+                                      axis 0 0 1
+                                      anchor 1.16 0.04 -0.67
+                                    }
+                                    device [
+                                      RotationalMotor {
+                                        name "LF_J_PAW"
+                                        maxTorque 10000000
+                                      }
+                                      PositionSensor {
+                                        name "LF_J_PAW_POS"
+                                      }
+                                    ]
+                                    endPoint DEF forepaw_l Solid {
+                                      translation 0.12282720666299962 0.5610303223052606 -1.1102230246251565e-16
+                                      rotation 0 0 -1 0.5000000000000004
+                                      children [
+                                        DEF FOREPAW_LEFT_V Transform {
+                                          translation 1.16 0.04 -0.67
+                                          children [
+                                            USE JOINT
+                                          ]
+                                        }
+                                        DEF LEFT_FOREPAW forepaw_left {
+                                        }
+                                      ]
+                                      name "forepaw"
+                                      contactMaterial "forepaw"
+                                      boundingObject Transform {
+                                        translation 1.32 0.04 -0.67
+                                        rotation 1 0 0 1.5707
+                                        children [
+                                          Cylinder {
+                                            height 0.1
+                                            radius 0.16
+                                          }
+                                        ]
+                                      }
+                                      physics Physics {
+                                        density -1
+                                        mass 1
+                                        centerOfMass [
+                                          1.32 0.04 -0.67
+                                        ]
+                                        inertiaMatrix [
+                                          1 1 1
+                                          0 0 0
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                                name "left_fore_l"
+                                boundingObject fore_l_left_bounding {
+                                }
+                                physics Physics {
+                                  density -1
+                                  mass 1
+                                  centerOfMass [
+                                    1 0.525297173761771 -0.6474295075433443
+                                  ]
+                                  inertiaMatrix [
+                                    1 1 1
+                                    0 0 0
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                      name "left_fore_u"
+                      boundingObject fore_u_left_bounding {
+                      }
+                      physics Physics {
+                        density -1
+                        mass 1
+                        centerOfMass [
+                          1.5090745243752528 1.1154258807771178 -0.5197402004472323
+                        ]
+                        inertiaMatrix [
+                          1 1 1
+                          0 0 0
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+            name "left_scapula"
+            boundingObject scapula_left_bounding {
+            }
+            physics Physics {
+              density -1
+              mass 1
+              centerOfMass [
+                0 0 0
+              ]
+              inertiaMatrix [
+                1 1 1
+                0 0 0
+              ]
+            }
+          }
+        }
+      ]
+    }
+    DEF RIGHT_FORE_LIMB Transform {
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position 0.65
+            axis 0 0 1
+            anchor 1.1 1.6 0.16
+          }
+          device [
+            RotationalMotor {
+              name "RF_J_SCAPULA"
+              maxTorque 10000000
+            }
+            PositionSensor {
+              name "RF_J_SCAPULA_POS"
+            }
+          ]
+          endPoint DEF scapula Solid {
+            translation 1.1926060707737018 -0.33943912398813314 0
+            rotation 0 0 1 0.6499999999999999
+            children [
+              DEF SCAPULA_J_V Transform {
+                translation 1.1 1.6 0.16
+                children [
+                  USE JOINT
+                ]
+              }
+              DEF RIGHT_SCAPULA scapula_right {
+              }
+              DEF FORE_U_J_T Transform {
+                children [
+                  DEF FORE_U_J HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0 0 1
+                      anchor 1.39 1.16 0.45
+                    }
+                    device [
+                      RotationalMotor {
+                        name "RF_J_UPPER"
+                        maxTorque 10000000
+                      }
+                      PositionSensor {
+                        name "RF_J_UPPER_POS"
+                      }
+                    ]
+                    endPoint DEF fore_u Solid {
+                      translation 2.220446049250313e-16 0 0
+                      rotation 0 0 1 0
+                      children [
+                        DEF FORE_U_V Transform {
+                          translation 1.39 1.16 0.45
+                          children [
+                            USE JOINT
+                          ]
+                        }
+                        DEF RIGHT_FORE_U fore_u_right {
+                        }
+                        DEF FORE_L_J_T Transform {
+                          rotation 0 0 1 0
+                          children [
+                            DEF FORE_L_J HingeJoint {
+                              jointParameters HingeJointParameters {
+                                position -0.3
+                                axis 0 0 1
+                                anchor 0.77 0.84 0.62
+                              }
+                              device [
+                                RotationalMotor {
+                                  name "RF_J_LOWER"
+                                  maxTorque 10000000
+                                }
+                                PositionSensor {
+                                  name "RF_J_LOWER_POS"
+                                }
+                              ]
+                              endPoint DEF fore_l Solid {
+                                translation -0.21384607022224167 0.2650679082637225 1.1102230246251565e-16
+                                rotation 0 0 -0.9999999999999999 0.3000000000000006
+                                children [
+                                  DEF FORE_L_J_V Transform {
+                                    translation 0.77 0.84 0.62
+                                    children [
+                                      USE JOINT
+                                    ]
+                                  }
+                                  DEF RIGHT_FORE_L fore_l_right {
+                                  }
+                                  DEF FOREPAW_L_J HingeJoint {
+                                    jointParameters HingeJointParameters {
+                                      position -0.5
+                                      axis 0 0 1
+                                      anchor 1.16 0.04 0.67
+                                    }
+                                    device [
+                                      RotationalMotor {
+                                        name "RF_J_PAW"
+                                        maxTorque 10000000
+                                      }
+                                      PositionSensor {
+                                        name "RF_J_PAW_POS"
+                                      }
+                                    ]
+                                    endPoint DEF forepaw_l Solid {
+                                      translation 0.123 0.5610303223052604 5.551115123125783e-16
+                                      rotation 0 0 -1 0.5000000000000004
+                                      children [
+                                        DEF FOREPAW_RIGHT_V Transform {
+                                          translation 1.16 0.04 0.67
+                                          children [
+                                            USE JOINT
+                                          ]
+                                        }
+                                        DEF RIGHT_FOREPAW forepaw_right {
+                                        }
+                                      ]
+                                      name "forepaw"
+                                      contactMaterial "forepaw"
+                                      boundingObject Transform {
+                                        translation 1.32 0.04 0.67
+                                        rotation 1 0 0 1.5707
+                                        children [
+                                          Cylinder {
+                                            height 0.1
+                                            radius 0.16
+                                          }
+                                        ]
+                                      }
+                                      physics Physics {
+                                        density -1
+                                        mass 1
+                                        centerOfMass [
+                                          1.32 0.04 0.67
+                                        ]
+                                        inertiaMatrix [
+                                          1 1 1
+                                          0 0 0
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                                boundingObject fore_l_right_bounding {
+                                }
+                                physics Physics {
+                                  density -1
+                                  mass 1
+                                  centerOfMass [
+                                    1.5681389429128307 0.5210174589099201 0.6478669493551141
+                                  ]
+                                  inertiaMatrix [
+                                    1 1 1
+                                    0 0 0
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                      boundingObject fore_u_right_bounding {
+                      }
+                      physics Physics {
+                        density -1
+                        mass 1
+                        centerOfMass [
+                          1.5131480548351013 1.1211751249752353 0.5319906874755401
+                        ]
+                        inertiaMatrix [
+                          1 1 1
+                          0 0 0
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+            boundingObject scapula_right_bounding {
+            }
+            physics Physics {
+              density -1
+              mass 1
+              centerOfMass [
+                1.3845926892182547 1.565832128299342 0.3114036071213892
+              ]
+              inertiaMatrix [
+                1 1 1
+                0 0 0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+  name "MOUSE"
+  boundingObject USE SPINE
+  physics Physics {
+    density -1
+    mass 25
+    centerOfMass [
+      0 0 0
+    ]
+    inertiaMatrix [
+      1000 100 100
+      0 0 0
+    ]
+  }
+  controller "mouse"
+}
+DEF LH_M_VIZ Group {
+  children [
+    DEF LH_MV_TRANSFORM_PMA Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_PMA Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_PMA Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_CF Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_CF Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_CF Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_SM Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_SM Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_SM Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_POP Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_POP Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_POP Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_RF Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_RF Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_RF Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_TA Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_TA Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_TA Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_SOL Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_SOL Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_SOL Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF LH_MV_TRANSFORM_LG Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF LH_MV_COLOR_LG Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF LH_MV_GEOM_LG Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+  ]
+}
+DEF RH_M_VIZ Group {
+  children [
+    DEF RH_MV_TRANSFORM_PMA Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_PMA Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_PMA Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_CF Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_CF Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_CF Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_SM Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_SM Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_SM Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_POP Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_POP Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_POP Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_RF Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_RF Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_RF Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_TA Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_TA Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_TA Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_SOL Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_SOL Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_SOL Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+    DEF RH_MV_TRANSFORM_LG Transform {
+      translation -0.43550663 1.14764811 -0.347994
+      rotation 0.6259815206068382 0 0.7798378907559895 1.13993
+      children [
+        Shape {
+          appearance Appearance {
+            material DEF RH_MV_COLOR_LG Material {
+              diffuseColor 1 0 0
+            }
+          }
+          geometry DEF RH_MV_GEOM_LG Capsule {
+            height 0.520419
+            radius 0.025
+          }
+        }
+      ]
+    }
+  ]
+}

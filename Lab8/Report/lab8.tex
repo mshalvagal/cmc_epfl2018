@@ -1,0 +1,215 @@
+
+\documentclass{cmc}
+
+\begin{document}
+
+\pagestyle{fancy}
+\lhead{\textit{\textbf{Computational Motor Control, Spring 2018} \\
+    Python exercise, Lab 8, GRADED}} \rhead{Student \\ Names}
+
+\section*{Student names: \ldots (please update)}
+
+\textit{Instructions: Update this file (or recreate a similar one,
+  e.g.\ in Word) to prepare your answers to the questions. Feel free
+  to add text, equations and figures as needed. Hand-written notes,
+  e.g.\ for the development of equations, can also be included e.g.\
+  as pictures (from your cell phone or from a scanner).
+  \textbf{\corr{This lab is graded.}} and needs to be submitted before
+  the \textbf{\corr{Deadline : 05-06-2018
+      Midnight}}.\\
+  \textbf{\corr{You only need to submit one final report for all of
+      the following exercises combined henceforth.}}\\ Please submit
+  both the source file (*.doc/*.tex) and a pdf of your document, as
+  well as all the used and updated Python functions in a single zipped
+  file called \corr{final\_report\_name1\_name2\_name3.zip} where
+  name\# are the team member’s last names.  \corr{Please submit only
+    one report per team!}}
+\\
+
+\subsection*{Locomotion}
+\label{sec:locomotion}
+
+In the previous lab you explored the reflex model with the mouse fixed
+in air. By changing the muscle activation gains you were able to
+produce a stable gait behavior based on the four phases described by
+[1]. In the current model the mouse will no longer be fixed but it can
+move around in three dimensions.
+
+Important to note the differences in [1] and the mouse model. The
+morphology of mouse and cat are different, the parameters used for
+musculo-skeletal properties are completely different from [1]. Do not
+be surprised to see results different from [1]. Also the mouse model
+is new and currently being developed.  Please report if you find any
+bugs and please point out any interesting behaviors that you may
+observe during the exercises.
+
+Now you can explore how the reflex model behaves under different
+conditions and study the locomotion behavior.
+
+In the current model we explore three important quantities during the
+stance phase in the reflex model,
+\begin{itemize}
+\item Coupling between the legs : This ensures that one of the hind
+  legs lifts-off from the ground only when the other leg is in stance
+  phase. This coupling can be enabled or disabled by the setting the
+  variable \corr{reflexes::COUPLING} to either True or False in the
+  \corr{mouse.py} controller file at any instant of time. In the
+  current model we tuned the parameters to produce locomotion for the
+  coupling case.  During the exercises you will observe how this
+  influences the overall model.
+\item Hip extension rule : During the stance phase, this reflex
+  parameter determines the angle of the hip extension at which the
+  stance phase terminates and enters the lift-off phase. This reflex
+  parameter can be enabled or disabled by the variable
+  \corr{reflexes::HIP\_EXTENSION\_RULE} to either True or False in the
+  \corr{mouse.py} controller file at any instant of time.
+\item Ankle unloading rule : During the stance phase, this reflex
+  parameter terminates the stance phase when the force in soleus
+  muscle drops below a threshold value and enters the lift-off
+  phase. This reflex parameter can be enabled or disabled by the
+  variable \corr{reflexes::ANKLE\_\-UNLOADING\_\-RULE} to either True or
+  False in the \corr{mouse.py} controller file at any instant of time.
+\end{itemize}
+
+Download the updated model from the git repository along with the
+controller files. In the new files, you can replace the muscle
+activation constants that you tuned from the previous lab in the
+current \corr{reflexes.py} file.
+
+\newpage
+\textbf{Data logging} The current model now saves additional entities
+during the simulation. They are,
+\begin{itemize}
+\item Trajectory of the left and right right hind foot
+\item Ground contact detection for the left and right hind foot
+\item Muscle activations and tendon forces from left and right hind
+  limb muscles
+\item Joint angular positions from left and right hind limb
+\end{itemize}
+
+Use \corr{Results::load\_data.py} file to read and plot the data saved
+in \corr{Results}
+
+\section*{\textnormal{Questions}}
+\label{sec:questions}
+
+\subsection*{7c. With the previously tuned reflex model, report if you
+  observe a stable gait or not with the 3D model for at least 2
+  seconds of simulation time? If you do not observe a stable gait then
+  tune the muscle activation constants (Kx) in the \corr{reflexes.py}
+  file to obtain stable gait. Report the changes in muscle activation
+  constants if any. Plot and explain the joint angles of hip, knee and
+  ankle joints from left and right hind limbs. Plot the muscle
+  activations of either left or right hind limb. Explain how the
+  muscle activity correlates with the different phases of gait. Plot
+  the ground contact of both left and right hing feet. Use
+  \corr{Results::load\_data.py} files to see how to load the data at
+  the end of the simulation.  Use subplots to make your plots and plot
+  both left and right joint angles in each subplot. See the example
+  given in \corr{Results::load\_data.py} (Note : You need to press
+  revert button in Webots to save the data.). Also compute and report
+  the duty factor of the model }
+
+\subsection*{7d. Now explore the coupling between the hind legs of the
+  mouse. In \corr{mouse.py} disable coupling at the beginning of the
+  simulation.  Plot the joint angles similar to the one before and
+  explain the gait you observe without coupling. What happens to the
+  gait when you start the simulation with coupling and then turn it
+  off/disable it after 1.0 second of simulation?.  To do this you can
+  use an \textit{if} condition in the \corr{mouse.py::run} and you can
+  obtain the current simulation time using the Webots robot class
+  method \corr{self.getTime()}.  Why is there a difference in behavior
+  in the above two cases and can it be improved by re-tuning the
+  parameters in the model?}
+
+\subsection*{7e. Explore the robustness of the model with coupling
+  under different terrains and small perturbations. Use
+  \corr{cmc\_mouse\_uphill.wbt} and \corr{cmc\_mouse\_downhill.wbt}
+  world files to simulate uphill and downhill climbing scenarios. In
+  the world files you can change
+  the inclination of slope by changing the rotation field in \\
+  Floor Solid $\rightarrow$ Floor Group $\rightarrow$ Hill
+  Transformation $\rightarrow$ rotation. Report the different
+  conditions under which the model is explored. Show one set of joint
+  angles plot and ground contact plot for one condition of up hill and
+  down hill scenario. With the same plots explain how the gait
+  frequency changes with respect to the terrain. Apply small
+  perturbations to the model using the Webots GUI and show how the
+  gait recovers using the ground contact plots of hind limbs.}
+
+\subsection*{As mentioned earlier, two main reflexes used in the model
+  for stance termination are hip extension rule and ankle unloading
+  rule. To explore, the role of each we start the simulation with all
+  couplings and reflexes enabled. At time == 1. we can start disabling
+  each of the rules and then look at the behavior of the model}
+
+\subsection*{7f. Is one type of reflex rule more important than the
+  other to generate stable locomotion? To explore the differences
+  first disable the hip extension rule at 1 second of simulation time
+  and observe the models gait. Do the same by disabling the ankle
+  loading rule at 1 second of simulation time and observe the models
+  gait. If you do not observe any differences in gait can you explain
+  how the coupling parameter is responsible for the stability?
+  Disable the coupling parameter to see the models performance. Would
+  re-tuning the model parameters help in stabilizing the model without
+  coupling? }
+\newpage
+\subsection*{7g. How do the reflex rules perform under different
+  terrains.  Use \\ \corr{cmc\_mouse\_uphill.wbt} and
+  \corr{cmc\_mouse\_downhill.wbt} world files to simulate uphill and
+  downhill climbing scenarios. Use the default slope of $0.08$ rad.
+  Show the joint trajectories and ground contacts while each of the
+  reflex parameters is disabled. Using the observations from 8b
+  describe if having the combined reflex rule helps in stabilizing the
+  model better.}
+
+\subsection*{In the coming weeks the goal will be to explore the above
+  scientific questions but also now by varying other the reflex
+  parameters in the system and tuning to the model to perform better
+  even under uncoupled condition. More details will be discussed
+  later}
+
+
+
+\section*{Discussion Questions}
+\label{sec:discussion-quesions}
+
+These questions require only a discussion and no implementation of any
+model is expected.
+
+\subsection*{a. What would be the potential benefits of adding a CPG
+  to the locomotor circuit? Try to relate to literature as much as
+  possible.}
+\label{sec:a}
+
+\subsection*{b. How could the model be extended? (e.g. more or less
+  detailed models, 3D, full body, more sensory modalities, inclusion
+  of more brain parts, ..., discuss, no need to implement). Try to
+  relate to literature as much as possible.}
+\label{sec:b}
+
+\subsection*{c. Which type of additional experiments could be done
+  (with the current model, and with extended models) and what would be
+  your predictions? Discuss, no need to implement. Try to relate to
+  literature as much as possible.}
+\label{sec:c}
+
+
+
+\section*{REFERENCES}
+\label{sec:references}
+
+1. \textit{Computer Simulation of Stepping in the Hind Legs of the
+  Cat: An Examination of Mechanisms Regulating the Stance-to-Swing
+  Transition} : Orjan Ekeberg and Keir Pearson. Journal of
+Neurophysiology 2005 94:6, 4256-4268
+\href{https://www.physiology.org/doi/abs/10.1152/jn.00065.2005}{\corr{download
+    link}}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
