@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 # Global settings for plotting
 # You may change as per your requirement
 plt.rc('lines', linewidth=2.0)
-plt.rc('font', size=35.0)
-plt.rc('axes', titlesize=25.0)     # fontsize of the axes title
-plt.rc('axes', labelsize=22.0)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=20.0)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=20.0)    # fontsize of the tick labels
+plt.rc('font', size=15.0)
+plt.rc('axes', titlesize=20.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=15.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=15.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=15.0)    # fontsize of the tick labels
 
 
 def load_data():
@@ -33,7 +33,7 @@ def plot_trajectories():
     plt.title('Trajectory of the X component')
     #plt.xlabel('Time [ms]')
     plt.ylabel('Position [cm]')
-    plt.legend(['Left ankle','Right ankle'])
+    plt.legend(['Left ankle','Right ankle'],loc='upper right')
     
     plt.subplot(312)
     plt.plot(time,ankle_l_trajectory[:,1])
@@ -41,7 +41,7 @@ def plot_trajectories():
     plt.title('Trajectory of the Y component')
     #plt.xlabel('Time [ms]')
     plt.ylabel('Position [cm]')
-    plt.legend(['Left ankle','Right ankle'])
+    plt.legend(['Left ankle','Right ankle'],loc='upper right')
     
     plt.subplot(313)
     plt.plot(time,ankle_l_trajectory[:,2])
@@ -49,9 +49,11 @@ def plot_trajectories():
     plt.title('Trajectory of the Z component')
     plt.xlabel('Time [ms]')
     plt.ylabel('Position [cm]')
-    plt.legend(['Left ankle','Right ankle'])
+    plt.legend(['Left ankle','Right ankle'],loc='upper right')
     
-    plt.suptitle('Decomposition of the trajectories of the hind feet')
+    plt.tight_layout()
+    
+#    plt.suptitle('Decomposition of the trajectories of the hind feet')
     return
 
 

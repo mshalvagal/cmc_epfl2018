@@ -174,19 +174,18 @@ class Reflexes(object):
     def stance_2_lift_off(self, side):
         """Transition from stance to lift-off.
         """
-
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION FROM STANCE PHASE
 
-        # print("STANCE")
+        print("STANCE")
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.05
-        K2 = 0.05
-        K3 = 0.5
-        K4 = 0.3
-        K5 = 0.2
-        K6 = 0.05
+        K1 = 0.3
+        K2 = 0.6
+        K3 = 1.0
+        K4 = 0.8
+        K5 = 0.5
+        K6 = 0.3
 
         self.activations[side + 'H_M_PMA'] = 0.05
         self.activations[side + 'H_M_CF'] = K1 if (
@@ -206,15 +205,15 @@ class Reflexes(object):
     def swing_2_touch_down(self, side):
         """Transition from swing to touch-down."""
 
-        # print("SWING")
+        print("SWING")
 
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION TO SWING PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.1
-        K2 = 0.3
-        K3 = 0.8
+        K1 = 0.3
+        K2 = 0.9
+        K3 = 0.5
 
         self.activations[side + 'H_M_PMA'] = K1 + 0.01 * \
             (0.69813 - self.angles[side + 'H_J_KNEE'])
@@ -231,14 +230,14 @@ class Reflexes(object):
     def touch_down_2_stance(self, side):
         """Transition from touch-down to stance."""
 
-        # print("TOUCH_DOWN")
+        print("TOUCH_DOWN")
 
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION TO TOUCH_DOWN PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.5
-        K2 = 0.2
+        K1 = 0.9
+        K2 = 0.1
 
         self.activations[side + 'H_M_PMA'] = 0.01
         self.activations[side + 'H_M_CF'] = K1
@@ -253,14 +252,14 @@ class Reflexes(object):
     def lift_off_2_swing(self, side):
         """Transition from lift-off to swing."""
 
-        # print("LIFT_OFF")
+        print("LIFT_OFF")
 
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION TO LIFT_OFF PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.3
-        K2 = 0.7
+        K1 = 0.5
+        K2 = 1.0
 
         self.activations[side + 'H_M_PMA'] = K1
         self.activations[side + 'H_M_CF'] = 0.01
