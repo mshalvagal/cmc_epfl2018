@@ -141,9 +141,9 @@ def plot_muscle_activations(side,t_start,t_stop):
     muscle_lh_activations = muscle_lh_activations[index_start:index_end+1,:]
     
     #time=np.linspace(1,len(ankle_l_trajectory[:,0]),len(ankle_l_trajectory[:,0]));
-    if side =='r':
+    if side =='right':
         muscle_activations = muscle_rh_activations
-    elif side == 'l':
+    elif side == 'left':
         muscle_activations = muscle_lh_activations       
     else:
         return
@@ -197,6 +197,9 @@ def plot_muscle_activations(side,t_start,t_stop):
     plt.xlabel('Time [s]')
     #plt.ylabel('Muscle activation')  
 #    plt.suptitle('Decomposition of the trajectories of the hind feet')
+    
+    plt.suptitle('Muscle activations of the '+ side + ' limb')
+    plt.show()
     return
 
 
@@ -240,7 +243,7 @@ def plot_joint_angles(t_start,t_stop):
     plt.plot(time_plot, np.rad2deg(joint_lh_positions[:, 2]))
     plt.plot(time_plot, np.rad2deg(joint_rh_positions[:, 2]))
     plt.grid('on')
-    plt.ylabel('Joint Angle [deg]')
+    plt.ylabel('Ankle Angle [deg]')
     plt.legend(['Left','Right'],loc='upper right')
     plt.xlabel('Time [s]')
 
@@ -273,9 +276,9 @@ def plot_gait_footsteps(t_start,t_stop):
 
 if __name__ == '__main__':
     plt.close("all")
-    t_start = 3
-    t_stop = 4
+    t_start = 6
+    t_stop = 8
     plot_joint_angles(t_start,t_stop)
     #plot_gait_footsteps(t_start,t_stop)
     plot_trajectories_XYZ(t_start,t_stop)
-    plot_muscle_activations('r',t_start,t_stop)
+    plot_muscle_activations('right',t_start,t_stop)

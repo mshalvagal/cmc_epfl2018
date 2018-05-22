@@ -203,12 +203,12 @@ class Reflexes(object):
         print(side + " STANCE")
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.6 #CF
-        K2 = 0.9 #CF
-        K3 = 0.7 #SM
-        K4 = 0.6 #RF
-        K5 = 0.7 #SOL
-        K6 = 0.8 #LG
+        K1 = 0.3 #CF
+        K2 = 0.6 #CF
+        K3 = 0.85 #SM
+        K4 = 0.8 #RF
+        K5 = 0.5 #SOL
+        K6 = 0.3 #LG
 
         self.activations[side + 'H_M_PMA'] = 0.05
         self.activations[side + 'H_M_CF'] = K1 if (
@@ -234,9 +234,9 @@ class Reflexes(object):
         # TRANSITION TO SWING PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.5 #PMA
-        K2 = 0.7 #POP
-        K3 = 0.7 #TA
+        K1 = 0.8 #PMA
+        K2 = 0.9 #POP
+        K3 = 0.5 #TA
         
         self.activations[side + 'H_M_PMA'] = K1 + 0.01 * \
             (0.69813 - self.angles[side + 'H_J_KNEE'])
@@ -281,7 +281,7 @@ class Reflexes(object):
         # TRANSITION TO LIFT_OFF PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.6 #PMA
+        K1 = 0.5 #PMA
         K2 = 1.0 #TA
 
         self.activations[side + 'H_M_PMA'] = K1
