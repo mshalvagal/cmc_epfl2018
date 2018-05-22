@@ -104,29 +104,27 @@ def plot_trajectories_XYZ(t_start,t_stop):
     plt.subplot(311)
     plt.plot(time,ankle_l_trajectory[:,0])
     plt.plot(time,ankle_r_trajectory[:,0])
-    plt.title('Trajectory of the X component')
+    #plt.title('Trajectory of the X component')
     plt.xlabel('Time [s]')
-    plt.ylabel('Position [cm]')
+    plt.ylabel('X Position [cm]')
     plt.legend(['Left ankle','Right ankle'],loc='upper right')
     
     plt.subplot(312)
     plt.plot(time,ankle_l_trajectory[:,1])
     plt.plot(time,ankle_r_trajectory[:,1])
-    plt.title('Trajectory of the Y component')
+    #plt.title('Trajectory of the Y component')
     plt.xlabel('Time [s]')
-    plt.ylabel('Position [cm]')
+    plt.ylabel('Y Position [cm]')
     plt.legend(['Left ankle','Right ankle'],loc='upper right')
     
     plt.subplot(313)
     plt.plot(time,ankle_l_trajectory[:,2])
     plt.plot(time,ankle_r_trajectory[:,2])
-    plt.title('Trajectory of the Z component')
+    #plt.title('Trajectory of the Z component')
     plt.xlabel('Time [s]')
-    plt.ylabel('Position [cm]')
+    plt.ylabel('Z Position [cm]')
     plt.legend(['Left ankle','Right ankle'],loc='upper right')
-    
-    plt.tight_layout()
-    
+        
 #    plt.suptitle('Decomposition of the trajectories of the hind feet')
     return
 
@@ -149,60 +147,55 @@ def plot_muscle_activations(side,t_start,t_stop):
         muscle_activations = muscle_lh_activations       
     else:
         return
-    
-    
-   
+  
     plt.figure('Muscle activations')
     plt.subplot(241)
     plt.plot(time,muscle_activations[:,0])
     plt.title('Muscle PMA')
-    plt.xlabel('Time [s]')
+    #plt.xlabel('Time [s]')
     plt.ylabel('Muscle activation')
-    
+
     plt.subplot(242)
     plt.plot(time,muscle_activations[:,1])
     plt.title('Muscle CF')
-    plt.xlabel('Time [s]')
-    plt.ylabel('Muscle activation') 
-    
+    #plt.xlabel('Time [s]')
+    #plt.ylabel('Muscle activation') 
+
     plt.subplot(243)    
     plt.plot(time,muscle_activations[:,2])
     plt.title('Muscle SM')
-    plt.xlabel('Time [s]')
-    plt.ylabel('Muscle activation')
+    #plt.xlabel('Time [s]')
+    #plt.ylabel('Muscle activation')
     
     plt.subplot(244)    
     plt.plot(time,muscle_activations[:,3])
     plt.title('Muscle POP')
-    plt.xlabel('Time [s]')
-    plt.ylabel('Muscle activation')    
+    #plt.xlabel('Time [s]')
+    #plt.ylabel('Muscle activation')    
     
     plt.subplot(245)    
     plt.plot(time,muscle_activations[:,4])
     plt.title('Muscle RF')
     plt.xlabel('Time [s]')
     plt.ylabel('Muscle activation')  
-    plt.tight_layout()
 
     plt.subplot(246)    
     plt.plot(time,muscle_activations[:,5])
     plt.title('Muscle TA')
     plt.xlabel('Time [s]')
-    plt.ylabel('Muscle activation')    
+    #plt.ylabel('Muscle activation')    
     
     plt.subplot(247)    
     plt.plot(time,muscle_activations[:,6])
     plt.title('Muscle SOL')
     plt.xlabel('Time [s]')
-    plt.ylabel('Muscle activation')  
-    plt.tight_layout()   
+    #plt.ylabel('Muscle activation')  
     
     plt.subplot(248)    
     plt.plot(time,muscle_activations[:,7])
     plt.title('Muscle LG')
     plt.xlabel('Time [s]')
-    plt.ylabel('Muscle activation')  
-    plt.tight_layout() 
+    #plt.ylabel('Muscle activation')  
 #    plt.suptitle('Decomposition of the trajectories of the hind feet')
     return
 
