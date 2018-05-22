@@ -200,15 +200,15 @@ class Reflexes(object):
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION FROM STANCE PHASE
 
-        print("STANCE")
+        print(side + " STANCE")
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.3
-        K2 = 0.6
-        K3 = 0.5
-        K4 = 0.8
-        K5 = 0.5
-        K6 = 0.3
+        K1 = 0.6 #CF
+        K2 = 0.9 #CF
+        K3 = 0.7 #SM
+        K4 = 0.6 #RF
+        K5 = 0.7 #SOL
+        K6 = 0.8 #LG
 
         self.activations[side + 'H_M_PMA'] = 0.05
         self.activations[side + 'H_M_CF'] = K1 if (
@@ -228,16 +228,16 @@ class Reflexes(object):
     def swing_2_touch_down(self, side):
         """Transition from swing to touch-down."""
 
-        print("SWING")
+        print(side + " SWING")
 
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION TO SWING PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.3
-        K2 = 0.9
-        K3 = 0.5
-
+        K1 = 0.5 #PMA
+        K2 = 0.7 #POP
+        K3 = 0.7 #TA
+        
         self.activations[side + 'H_M_PMA'] = K1 + 0.01 * \
             (0.69813 - self.angles[side + 'H_J_KNEE'])
         self.activations[side + 'H_M_CF'] = 0.01
@@ -253,14 +253,14 @@ class Reflexes(object):
     def touch_down_2_stance(self, side):
         """Transition from touch-down to stance."""
 
-        print("TOUCH_DOWN")
+        print(side + " TOUCH_DOWN")
 
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION TO TOUCH_DOWN PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.9
-        K2 = 0.1
+        K1 = 0.9 #CF
+        K2 = 0.1 #SOL
 
         self.activations[side + 'H_M_PMA'] = 0.01
         self.activations[side + 'H_M_CF'] = K1
@@ -275,14 +275,14 @@ class Reflexes(object):
     def lift_off_2_swing(self, side):
         """Transition from lift-off to swing."""
 
-        print("LIFT_OFF")
+        print(side + " LIFT_OFF")
 
         # CHANGE THE ACTIVATION FUNCTION OF MUSCLES TO
         # TRANSITION TO LIFT_OFF PHASE
 
         # MUSCLE ACTIVATION CONSTANTS
-        K1 = 0.5
-        K2 = 1.0
+        K1 = 0.6 #PMA
+        K2 = 1.0 #TA
 
         self.activations[side + 'H_M_PMA'] = K1
         self.activations[side + 'H_M_CF'] = 0.01
