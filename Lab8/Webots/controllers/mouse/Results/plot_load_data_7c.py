@@ -4,6 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
+# Global settings for plotting
+# You may change as per your requirement
+plt.rc('lines', linewidth=2.0)
+plt.rc('font', size=12.0)
+plt.rc('axes', titlesize=16.0)     # fontsize of the axes title
+plt.rc('axes', labelsize=14.0)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=12.0)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=12.0)    # fontsize of the tick labels
 
 def load_data():
     """ Load results data """
@@ -149,56 +157,58 @@ def plot_muscle_activations(side,t_start,t_stop):
         return
   
     plt.figure('Muscle activations')
-    plt.subplot(241)
+    plt.subplot(421)
     plt.plot(time,muscle_activations[:,0])
     plt.title('Muscle PMA')
     #plt.xlabel('Time [s]')
     plt.ylabel('Muscle activation')
 
-    plt.subplot(242)
+    plt.subplot(422)
     plt.plot(time,muscle_activations[:,1])
     plt.title('Muscle CF')
     #plt.xlabel('Time [s]')
     #plt.ylabel('Muscle activation') 
 
-    plt.subplot(243)    
+    plt.subplot(423)    
     plt.plot(time,muscle_activations[:,2])
     plt.title('Muscle SM')
     #plt.xlabel('Time [s]')
-    #plt.ylabel('Muscle activation')
+    plt.ylabel('Muscle activation')
     
-    plt.subplot(244)    
+    plt.subplot(424)    
     plt.plot(time,muscle_activations[:,3])
     plt.title('Muscle POP')
     #plt.xlabel('Time [s]')
     #plt.ylabel('Muscle activation')    
     
-    plt.subplot(245)    
+    plt.subplot(425)    
     plt.plot(time,muscle_activations[:,4])
     plt.title('Muscle RF')
-    plt.xlabel('Time [s]')
+#    plt.xlabel('Time [s]')
     plt.ylabel('Muscle activation')  
 
-    plt.subplot(246)    
+    plt.subplot(426)    
     plt.plot(time,muscle_activations[:,5])
     plt.title('Muscle TA')
-    plt.xlabel('Time [s]')
+#    plt.xlabel('Time [s]')
     #plt.ylabel('Muscle activation')    
     
-    plt.subplot(247)    
+    plt.subplot(427)    
     plt.plot(time,muscle_activations[:,6])
     plt.title('Muscle SOL')
     plt.xlabel('Time [s]')
-    #plt.ylabel('Muscle activation')  
+    plt.ylabel('Muscle activation')  
     
-    plt.subplot(248)    
+    plt.subplot(428)    
     plt.plot(time,muscle_activations[:,7])
     plt.title('Muscle LG')
     plt.xlabel('Time [s]')
+    
+    plt.subplots_adjust(hspace=0.5)
     #plt.ylabel('Muscle activation')  
 #    plt.suptitle('Decomposition of the trajectories of the hind feet')
     
-    plt.suptitle('Muscle activations of the '+ side + ' limb')
+#    plt.suptitle('Muscle activations of the '+ side + ' limb')
     plt.show()
     return
 
@@ -274,11 +284,205 @@ def plot_gait_footsteps(t_start,t_stop):
      plt.show()
      return
 
+def plot_joint_angles_with_contact(t_start,t_stop):
+    """ to plot the joint angles"""
+    [time,
+     ankle_l_trajectory,
+     ankle_r_trajectory,
+     foot_l_contact,
+     foot_r_contact,
+     muscle_lh_activations,
+     muscle_rh_activations,
+     muscle_lh_forces,
+     muscle_rh_forces,
+     joint_lh_positions,
+     joint_rh_positions] = load_data()
+    
+    index_start = np.where(time == t_start)[0][0]
+    index_end = np.where(time == t_stop)[0][0]
+    
+    time_plot = time[index_start:index_end+1]
+    joint_lh_positions = joint_lh_positions[index_start:index_end+1,:]
+    joint_rh_positions = joint_rh_positions[index_start:index_end+1,:]
+    
+    gait = foot_r_contact[index_start:index_end+1,:]
+    foot_l_contact = foot_l_contact[index_start:index_end+1,:]
+    
+#    gait = np.hstack((foot_r_contact, foot_l_contact))
+
+    # Example to plot joint trajectories.
+    # Feel free to change or use your own plot tools
+    plt.figure()
+    ax = plt.subplot(3,1,1)
+#    plt.plot(time_plot, np.rad2deg(joint_lh_positions[:, 0]))
+    plt.plot(time_plot, np.rad2deg(joint_rh_positions[:, 0]),'r')
+    plt.ylabel('Hip Angle [deg]')
+#    plt.legend(['Left','Right'],loc='upper right')
+    plt.grid('on')
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time_plot[t], -300, width=0.01, height=150)
+    ax = plt.subplot(3,1,2)
+#    plt.plot(time_plot, np.rad2deg(joint_lh_positions[:, 1]))
+    plt.plot(time_plot, np.rad2deg(joint_rh_positions[:, 1]),'r')
+    plt.ylabel('Knee Angle [deg]')
+#    plt.legend(['Left','Right'],loc='upper right')
+    plt.grid('on')
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time_plot[t], -600, width=0.01, height=150)
+    ax = plt.subplot(3,1,3)
+#    plt.plot(time_plot, np.rad2deg(joint_lh_positions[:, 2]))
+    plt.plot(time_plot, np.rad2deg(joint_rh_positions[:, 2]),'r')
+    plt.grid('on')
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time_plot[t], -300, width=0.01, height=150)
+    plt.ylabel('Ankle Angle [deg]')
+#    plt.legend(['Left','Right'],loc='upper right')
+    plt.xlabel('Time [s]')
+
+    return
+
+def plot_muscle_activations_with_patches(side,t_start,t_stop):
+    """ Plot the trajectories of the hind feet"""
+    
+    time, ankle_l_trajectory, ankle_r_trajectory,foot_l_contact,foot_r_contact,muscle_lh_activations, muscle_rh_activations,muscle_lh_forces,muscle_rh_forces,joint_lh_positions,joint_rh_positions = load_data()
+
+    index_start = np.where(time == t_start)[0][0]
+    index_end = np.where(time == t_stop)[0][0]
+    
+    time = time[index_start:index_end+1]
+    muscle_rh_activations = muscle_rh_activations[index_start:index_end+1,:]
+    muscle_lh_activations = muscle_lh_activations[index_start:index_end+1,:]
+    
+    gait = foot_r_contact[index_start:index_end+1,:]
+    #time=np.linspace(1,len(ankle_l_trajectory[:,0]),len(ankle_l_trajectory[:,0]));
+    if side =='right':
+        muscle_activations = muscle_rh_activations
+    elif side == 'left':
+        muscle_activations = muscle_lh_activations       
+    else:
+        return
+  
+    plt.figure('Muscle activations')
+    ax = plt.subplot(421)
+    plt.plot(time,muscle_activations[:,0],'r')
+    plt.title('Muscle PMA')
+    #plt.xlabel('Time [s]')
+    plt.ylabel('Muscle activation')
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+
+    ax = plt.subplot(422)
+    plt.plot(time,muscle_activations[:,1],'r')
+    plt.title('Muscle CF')
+    #plt.xlabel('Time [s]')
+    #plt.ylabel('Muscle activation') 
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+
+    ax = plt.subplot(423)    
+    plt.plot(time,muscle_activations[:,2],'r')
+    plt.title('Muscle SM')
+    #plt.xlabel('Time [s]')
+    plt.ylabel('Muscle activation')
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+    
+    ax = plt.subplot(424)    
+    plt.plot(time,muscle_activations[:,3],'r')
+    plt.title('Muscle POP')
+    #plt.xlabel('Time [s]')
+    #plt.ylabel('Muscle activation')    
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+    
+    ax = plt.subplot(425)    
+    plt.plot(time,muscle_activations[:,4],'r')
+    plt.title('Muscle RF')
+#    plt.xlabel('Time [s]')
+    plt.ylabel('Muscle activation')  
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+
+    ax = plt.subplot(426)    
+    plt.plot(time,muscle_activations[:,5],'r')
+    plt.title('Muscle TA')
+#    plt.xlabel('Time [s]')
+    #plt.ylabel('Muscle activation')    
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+    
+    ax = plt.subplot(427)    
+    plt.plot(time,muscle_activations[:,6],'r')
+    plt.title('Muscle SOL')
+    plt.xlabel('Time [s]')
+    plt.ylabel('Muscle activation')  
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+    
+    ax = plt.subplot(428)    
+    plt.plot(time,muscle_activations[:,7],'r')
+    plt.title('Muscle LG')
+    plt.xlabel('Time [s]')
+    for t, g in enumerate(gait):
+        for l, gait_l in enumerate(g):
+            if gait_l:
+                add_patch(ax, time[t], -300, width=0.01, height=150)
+    
+    plt.subplots_adjust(hspace=0.5)
+    #plt.ylabel('Muscle activation')  
+#    plt.suptitle('Decomposition of the trajectories of the hind feet')
+    
+#    plt.suptitle('Muscle activations of the '+ side + ' limb')
+    plt.show()
+    return
+
+def compute_duty_factor():
+    """ to plot the joint angles"""
+    [time,
+     ankle_l_trajectory,
+     ankle_r_trajectory,
+     foot_l_contact,
+     foot_r_contact,
+     muscle_lh_activations,
+     muscle_rh_activations,
+     muscle_lh_forces,
+     muscle_rh_forces,
+     joint_lh_positions,
+     joint_rh_positions] = load_data()
+    
+    print(np.sum(foot_l_contact)/len(foot_l_contact))
+    print(np.sum(foot_r_contact)/len(foot_r_contact))
+
+    return np.sum(foot_l_contact)/len(foot_l_contact)*0.5 + np.sum(foot_r_contact)/len(foot_r_contact)*0.5
+
 if __name__ == '__main__':
     plt.close("all")
     t_start = 6
     t_stop = 8
-    plot_joint_angles(t_start,t_stop)
-    #plot_gait_footsteps(t_start,t_stop)
-    plot_trajectories_XYZ(t_start,t_stop)
-    plot_muscle_activations('right',t_start,t_stop)
+#    plot_joint_angles(t_start,t_stop)
+#    plot_gait_footsteps(t_start,t_stop)
+#    plot_trajectories_XYZ(t_start,t_stop)
+#    plot_muscle_activations('right',t_start,t_stop)
+#    plot_joint_angles_with_contact(t_start,t_stop)
+#    plot_muscle_activations_with_patches('right',t_start,t_stop)
+    compute_duty_factor()
